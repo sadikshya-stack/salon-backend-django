@@ -543,3 +543,48 @@
 .bg-primary {
     background-color: #bf9456 !important;
 }
+html, body {
+    overflow-x: hidden !important;
+}
+
+/* Default (Desktop) */
+.salon-navbar .nav-link {
+    font-size: 0.95rem;   /* slightly smaller */
+    padding: 0.5rem 0.75rem;
+}
+
+/* Tablets */
+@media (max-width: 1200px) {
+    .salon-navbar .nav-link {
+        font-size: 0.85rem;
+        padding: 0.45rem 0.6rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 992px) {
+    .salon-navbar .nav-link {
+        font-size: 1rem;  /* readable in collapsed menu */
+        padding: 0.5rem 1rem;
+    }
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: rgba(0, 0, 0, .55);
+}
+
+@media (min-width: 992px) {
+    .navbar-expand-lg .navbar-nav .nav-link {
+        padding-right: .5em;
+        padding-left: .5em;
+    }
+
+    .navbar .navbar-nav .nav-link {
+    margin: 0 12px;
+    font-size: 18px;
+    }
+}
+.navbar .navbar-nav .nav-link {
+    margin: 0 6px;
+    font-size: 15px;
+}
