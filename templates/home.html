@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<!-- HERO -->
+<div id="home" class="container-fluid p-0 hero-header bg-light">
+    <div class="container p-0">
+        <div class="row g-0 align-items-center">
+
+            <div class="col-lg-6 py-5">
+                <h1 class="display-1 mb-4">Glamour Touch</h1>
+                <p class="lead">Professional Salon & Beauty Services</p>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="owl-carousel header-carousel">
+                    <img src="{% static 'img/hero-slider-1.jpg' %}" class="img-fluid">
+                    <img src="{% static 'img/hero-slider-2.jpg' %}" class="img-fluid">
+                    <img src="{% static 'img/hero-slider-3.jpg' %}" class="img-fluid">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- SECTIONS -->
+
+{% include 'services.html' %}
+{% include 'products.html' %}
+
+{% endblock %}

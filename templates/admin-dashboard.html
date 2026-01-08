@@ -1,0 +1,1299 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard - Beauty Parlour Management System{% endblock %}
+
+{% block extra_css %}
+<!-- Additional CSS specific to admin dashboard -->
+<link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+<link href="{% static 'lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
+<link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+<style>
+        :root {
+            --sidebar-width: 280px;
+            --topbar-height: 80px;
+        }
+        
+        /* Admin Layout */
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .admin-sidebar {
+            width: var(--sidebar-width);
+            background: #fff;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            height: 100vh;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+        
+        .admin-sidebar-header {
+            height: var(--topbar-height);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .admin-sidebar-header h3 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--bs-primary);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        
+        .admin-sidebar-nav {
+            padding: 1.5rem 0;
+        }
+        
+        .admin-nav-title {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #6c757d;
+            letter-spacing: 0.5px;
+            margin-top: 1rem;
+        }
+        
+        .admin-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            color: #4a4a4a;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            border-left: 3px solid transparent;
+        }
+        
+        .admin-nav-link i {
+            margin-right: 10px;
+            width: 24px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+        
+        .admin-nav-link:hover, .admin-nav-link.active {
+            background: rgba(214, 51, 132, 0.05);
+            color: var(--bs-primary);
+            border-left-color: var(--bs-primary);
+            padding-left: 1.8rem;
+        }
+        
+        /* Main Content */
+        .admin-main {
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            min-height: 100vh;
+            background: #f8f9fa;
+            transition: all 0.3s;
+        }
+        
+        /* Topbar */
+        .admin-topbar {
+            height: var(--topbar-height);
+            background: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .admin-toggle-sidebar {
+            font-size: 1.5rem;
+            color: #4a4a4a;
+            cursor: pointer;
+            margin-right: 1.5rem;
+            display: none;
+        }
+        
+        .admin-search {
+            position: relative;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .admin-search input {
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border-radius: 50px;
+            border: 1px solid #e9ecef;
+            width: 100%;
+        }
+        
+        .admin-search i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        .admin-topbar-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+        
+        .admin-notification, .admin-profile {
+            position: relative;
+            margin-left: 1.5rem;
+        }
+        
+        .admin-notification-btn, .admin-profile-btn {
+            background: none;
+            border: none;
+            color: #4a4a4a;
+            font-size: 1.25rem;
+            position: relative;
+            padding: 0.5rem;
+        }
+        
+        .admin-notification-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--bs-primary);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .admin-profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.5rem;
+            border: 2px solid rgba(214, 51, 132, 0.2);
+        }
+        
+        .admin-profile-name {
+            font-weight: 500;
+            margin-right: 0.5rem;
+        }
+        
+        /* Content */
+        .admin-content {
+            padding: 2rem;
+        }
+        
+        /* Stats Cards */
+        .admin-stats-row {
+            margin-bottom: 2rem;
+        }
+        
+        .admin-stat-card {
+            background: #fff;
+            border-radius: 0.5rem;
+            padding: 1.75rem;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.03);
+            height: 100%;
+            transition: all 0.3s;
+            border-left: 4px solid var(--bs-primary);
+        }
+        
+        .admin-stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.05);
+        }
+        
+        .admin-stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+            color: var(--bs-primary);
+            background: rgba(214, 51, 132, 0.1);
+        }
+        
+        .admin-stat-value {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 0.25rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .admin-stat-label {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+        
+        /* Tables */
+        .admin-card {
+            background: #fff;
+            border-radius: 0.75rem;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.03);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .admin-card-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .admin-card-title {
+            margin: 0;
+            font-weight: 600;
+            color: #333;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+        
+        .admin-card-title:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background-color: var(--bs-primary);
+            border-radius: 4px;
+        }
+        
+        .admin-table {
+            margin-bottom: 0;
+        }
+        
+        .admin-table th {
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: #6c757d;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .admin-table td {
+            padding: 1.25rem 1.5rem;
+            vertical-align: middle;
+            border-color: #f1f1f1;
+            color: #555;
+        }
+        
+        .badge {
+            padding: 0.4em 0.8em;
+            font-weight: 500;
+            font-size: 0.75em;
+            border-radius: 50rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-pending {
+            background-color: #fff8e6;
+            color: #e6a700;
+            border: 1px solid #ffeeba;
+        }
+        
+        .badge-confirmed {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .badge-completed {
+            background-color: #f1f8e9;
+            color: #558b2f;
+            border: 1px solid #dcedc8;
+        }
+        
+        /* Buttons */
+        .btn {
+            font-family: 'Work Sans', sans-serif;
+            font-weight: 500;
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-sm {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.85rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: #c12b6e;
+            border-color: #c12b6e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(214, 51, 132, 0.2);
+        }
+        
+        .btn-outline-primary {
+            color: var(--bs-primary);
+            border-color: var(--bs-primary);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--bs-primary);
+            border-color: var(--bs-primary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .admin-content {
+                padding: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+                z-index: 1050;
+            }
+            
+            .admin-sidebar.show {
+                transform: translateX(0);
+                box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            }
+            
+            .admin-main {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .admin-toggle-sidebar {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .admin-topbar {
+                padding: 0 1.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .admin-content {
+                padding: 1.25rem 1rem;
+            }
+            
+            .admin-search {
+                display: none;
+            }
+            
+            .admin-stat-card {
+                padding: 1.5rem 1.25rem;
+            }
+            
+            .admin-stat-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.35rem;
+            }
+            
+            .admin-stat-value {
+                font-size: 1.6rem;
+            }
+            
+            .admin-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                padding: 1.25rem;
+            }
+            
+            .admin-card-actions {
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<!-- Spinner -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center" style="z-index: 9999;">
+    <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+<div class="admin-wrapper">
+        <!-- Sidebar -->
+        <div class="admin-sidebar" id="adminSidebar">
+            <div class="admin-sidebar-header">
+                <h3><i class="bi bi-scissors me-2"></i>Admin</h3>
+            </div>
+            <div class="admin-sidebar-nav">
+                <div class="admin-nav-title">Main</div>
+                <a href="{% url 'admin_dashboard' %}" class="admin-nav-link active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{% url 'admin_appointments' %}" class="admin-nav-link">
+                    <i class="far fa-calendar-alt"></i>
+                    <span>Appointments</span>
+                </a>
+                <a href="{% url 'admin_services' %}" class="admin-nav-link">
+                    <i class="fas fa-spa"></i>
+                    <span>Services</span>
+                </a>
+                <a href="{% url 'admin_inventory' %}" class="admin-nav-link">
+                    <i class="fas fa-boxes"></i>
+                    <span>Inventory</span>
+                </a>
+                <a href="{% url 'admin_staff' %}" class="admin-nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Staff</span>
+                </a>
+                <div class="admin-nav-title">Management</div>
+                <a href="{% url 'admin_customers' %}" class="admin-nav-link">
+                    <i class="fas fa-user-friends"></i>
+                    <span>Customers</span>
+                </a>
+                <a href="{% url 'admin_reports' %}" class="admin-nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </a>
+                <a href="{% url 'admin_settings' %}" class="admin-nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="admin-main">
+            <!-- Topbar -->
+            <div class="admin-topbar">
+                <button class="admin-toggle-sidebar" id="toggleSidebar">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="admin-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="form-control" placeholder="Search...">
+                </div>
+                
+                <div class="admin-topbar-right">
+                    <div class="admin-notification">
+                        <button class="admin-notification-btn">
+                            <i class="far fa-bell"></i>
+                            <span class="admin-notification-badge">3</span>
+                        </button>
+                    </div>
+                    
+                    <div class="dropdown admin-profile">
+                        <button class="admin-profile-btn d-flex align-items-center" data-bs-toggle="dropdown">
+                            <img src="https://ui-avatars.com/api/?name=Admin+User&background=d63384&color=fff" alt="Admin" class="admin-profile-img">
+                            <span class="admin-profile-name d-none d-md-inline">Admin User</span>
+                            <i class="fas fa-chevron-down d-none d-md-inline ms-1" style="font-size: 0.8rem;"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="{% url 'admin_profile' %}">
+                                <i class="fas fa-user me-2"></i>Profile
+                            </a>
+                            <a class="dropdown-item" href="{% url 'admin_settings' %}">
+                                <i class="fas fa-cog me-2"></i>Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="{% url 'login' %}">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content -->
+            <div class="admin-content">
+                <h4 class="mb-4">Dashboard Overview</h4>
+                
+                <!-- Stats Row -->
+                <div class="row admin-stats-row">
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">
+                                <i class="far fa-calendar-check"></i>
+                            </div>
+                            <h3 class="admin-stat-value">24</h3>
+                            <p class="admin-stat-label">Today's Appointments</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h3 class="admin-stat-value">12</h3>
+                            <p class="admin-stat-label">Pending Approvals</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">
+                                <i class="fas fa-spa"></i>
+                            </div>
+                            <h3 class="admin-stat-value">36</h3>
+                            <p class="admin-stat-label">Total Services</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 class="admin-stat-value">248</h3>
+                            <p class="admin-stat-label">Total Customers</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Appointments -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h5 class="admin-card-title">Recent Appointments</h5>
+                        <div class="admin-card-actions">
+                            <a href="{% url 'admin_appointments' %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-list me-1"></i> View All
+                            </a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Customer</th>
+                                    <th>Service</th>
+                                    <th>Date & Time</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#AP20230001</td>
+                                    <td>John Doe</td>
+                                    <td>Haircut & Styling</td>
+                                    <td>Jun 25, 2023, 10:00 AM</td>
+                                    <td><span class="badge badge-pending">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary me-1">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#AP20230002</td>
+                                    <td>Jane Smith</td>
+                                    <td>Facial Treatment</td>
+                                    <td>Jun 25, 2023, 11:30 AM</td>
+                                    <td><span class="badge badge-confirmed">Confirmed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary me-1">View</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#AP20230003</td>
+                                    <td>Robert Johnson</td>
+                                    <td>Manicure & Pedicure</td>
+                                    <td>Jun 25, 2023, 2:00 PM</td>
+                                    <td><span class="badge badge-completed">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary me-1">View</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <!-- Recent Services -->
+                    <div class="col-lg-6">
+                        <div class="admin-card h-100">
+                            <div class="admin-card-header">
+                                <h5 class="admin-card-title">Popular Services</h5>
+                                <div class="admin-card-actions">
+                                    <a href="{% url 'admin_services' %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-plus me-1"></i> Add New
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Service</th>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                            <th>Duration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Haircut & Styling</td>
+                                            <td>Hair</td>
+                                            <td>$35</td>
+                                            <td>45 min</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Facial Treatment</td>
+                                            <td>Skin Care</td>
+                                            <td>$65</td>
+                                            <td>60 min</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Manicure & Pedicure</td>
+                                            <td>Nails</td>
+                                            <td>$55</td>
+                                            <td>75 min</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Low Stock Items -->
+                    <div class="col-lg-6">
+                        <div class="admin-card h-100">
+                            <div class="admin-card-header">
+                                <h5 class="admin-card-title">Low Stock Items</h5>
+                                <div class="admin-card-actions">
+                                    <a href="{% url 'admin_inventory' %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-plus me-1"></i> Add New
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Category</th>
+                                            <th>Stock</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Shampoo</td>
+                                            <td>Hair Care</td>
+                                            <td>3</td>
+                                            <td><span class="badge bg-danger">Low</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Nail Polish - Red</td>
+                                            <td>Nail Care</td>
+                                            <td>2</td>
+                                            <td><span class="badge bg-danger">Low</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Facial Mask</td>
+                                            <td>Skin Care</td>
+                                            <td>5</td>
+                                            <td><span class="badge bg-warning">Medium</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Inventory Management Section -->
+            <div class="admin-content" id="inventorySection" style="display: none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0">Inventory Management</h4>
+                    <button class="btn btn-primary" id="addInventoryBtn">
+                        <i class="fas fa-plus me-2"></i>Add New Item
+                    </button>
+                </div>
+                
+                <!-- Stats Row -->
+                <div class="row admin-stats-row mb-4">
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <h3 class="admin-stat-value" id="totalProducts">0</h3>
+                            <p class="admin-stat-label">Total Products</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h3 class="admin-stat-value" id="inStockItems">0</h3>
+                            <p class="admin-stat-label">In Stock</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h3 class="admin-stat-value" id="lowStockItems">0</h3>
+                            <p class="admin-stat-label">Low Stock</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <h3 class="admin-stat-value" id="outOfStockItems">0</h3>
+                            <p class="admin-stat-label">Out of Stock</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filters and Search -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Category</label>
+                                <select class="form-select" id="categoryFilter">
+                                    <option value="">All Categories</option>
+                                    <option value="hair">Hair Care</option>
+                                    <option value="skin">Skin Care</option>
+                                    <option value="makeup">Makeup</option>
+                                    <option value="nails">Nail Care</option>
+                                    <option value="tools">Tools & Equipment</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Stock Status</label>
+                                <select class="form-select" id="stockFilter">
+                                    <option value="">All Items</option>
+                                    <option value="in-stock">In Stock</option>
+                                    <option value="low-stock">Low Stock</option>
+                                    <option value="out-of-stock">Out of Stock</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Search</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="inventorySearch" placeholder="Search products...">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Inventory Table -->
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Stock</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryTableBody">
+                                    <!-- Inventory items will be loaded here dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<!-- Add/Edit Inventory Item Modal -->
+    <div class="modal fade" id="inventoryItemModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="inventoryModalTitle">Add New Item</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="inventoryItemForm">
+                        <input type="hidden" id="itemId">
+                        <div class="mb-3">
+                            <label for="itemName" class="form-label">Product Name</label>
+                            <input type="text" class="form-control" id="itemName" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="itemCategory" class="form-label">Category</label>
+                                <select class="form-select" id="itemCategory" required>
+                                    <option value="hair">Hair Care</option>
+                                    <option value="skin">Skin Care</option>
+                                    <option value="makeup">Makeup</option>
+                                    <option value="nails">Nail Care</option>
+                                    <option value="tools">Tools & Equipment</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="itemPrice" class="form-label">Price (NPR)</label>
+                                <input type="number" class="form-control" id="itemPrice" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="itemQuantity" class="form-label">Quantity</label>
+                                <input type="number" class="form-control" id="itemQuantity" min="0" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="itemMinStock" class="form-label">Minimum Stock Level</label>
+                                <input type="number" class="form-control" id="itemMinStock" min="1" value="5" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="itemDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="itemDescription" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="saveInventoryItem">Save Item</button>
+                </div>
+            </div>
+        </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <!-- Additional JS specific to admin dashboard -->
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+    <!-- Initialize components -->
+    <script>
+        // Toggle Sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('toggleSidebar');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    const sidebar = document.getElementById('adminSidebar');
+                    const mainContent = document.querySelector('.admin-main');
+                    const icon = toggleBtn.querySelector('i');
+                    
+                    if (sidebar && mainContent && icon) {
+                        sidebar.classList.toggle('show');
+                        mainContent.classList.toggle('full-width');
+                        icon.classList.toggle('fa-bars');
+                        icon.classList.toggle('fa-times');
+                    }
+                });
+            }
+            
+            // Close sidebar when clicking outside on mobile
+            document.addEventListener('click', function(event) {
+                const sidebar = document.getElementById('adminSidebar');
+                const toggleBtn = document.getElementById('toggleSidebar');
+                
+                if (window.innerWidth <= 992 && sidebar && toggleBtn && 
+                    !sidebar.contains(event.target) && 
+                    !toggleBtn.contains(event.target)) {
+                    
+                    sidebar.classList.remove('show');
+                    const icon = toggleBtn.querySelector('i');
+                    if (icon) {
+                        icon.classList.add('fa-bars');
+                        icon.classList.remove('fa-times');
+                    }
+                }
+            });
+            
+            // Hide spinner when page is loaded
+            const spinner = document.getElementById('spinner');
+            if (spinner) {
+                setTimeout(() => {
+                    spinner.classList.remove('show');
+                }, 500);
+            }
+        });
+
+        // Inventory Management System
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize inventory data from localStorage or use sample data
+            let inventory = JSON.parse(localStorage.getItem('beautyParlourInventory')) || [];
+            
+            // DOM Elements
+            const inventoryTableBody = document.getElementById('inventoryTableBody');
+            const addInventoryBtn = document.getElementById('addInventoryBtn');
+            const saveInventoryItemBtn = document.getElementById('saveInventoryItem');
+            const inventoryItemModal = new bootstrap.Modal(document.getElementById('inventoryItemModal'));
+            const inventoryItemForm = document.getElementById('inventoryItemForm');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const stockFilter = document.getElementById('stockFilter');
+            const inventorySearch = document.getElementById('inventorySearch');
+            const searchBtn = inventorySearch.nextElementSibling;
+            
+            // Event Listeners
+            addInventoryBtn.addEventListener('click', openAddModal);
+            saveInventoryItemBtn.addEventListener('click', saveInventoryItem);
+            categoryFilter.addEventListener('change', filterInventory);
+            stockFilter.addEventListener('change', filterInventory);
+            searchBtn.addEventListener('click', filterInventory);
+            inventorySearch.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') filterInventory();
+            });
+            
+            // Navigation to Inventory Section
+            const inventoryNavLink = document.querySelector('a[href="inventory.html"]');
+            if (inventoryNavLink) {
+                inventoryNavLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Hide all sections
+                    document.querySelectorAll('.admin-content').forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    // Show inventory section
+                    document.getElementById('inventorySection').style.display = 'block';
+                    // Update active nav link
+                    document.querySelectorAll('.admin-nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            }
+            
+            // Initialize the inventory table
+            renderInventoryTable();
+            updateStatistics();
+            
+            // Functions
+            function renderInventoryTable(items = null) {
+                const inventoryToRender = items || inventory;
+                inventoryTableBody.innerHTML = '';
+                
+                if (inventoryToRender.length === 0) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td colspan="6" class="text-center py-4">
+                            <i class="fas fa-box-open fa-2x mb-2 text-muted"></i>
+                            <p class="mb-0">No inventory items found</p>
+                            <button class="btn btn-primary btn-sm mt-2" id="addFirstItem">
+                                <i class="fas fa-plus me-1"></i> Add Your First Item
+                            </button>
+                        </td>
+                    `;
+                    inventoryTableBody.appendChild(row);
+                    
+                    // Add event listener to the "Add Your First Item" button
+                    const addFirstItemBtn = document.getElementById('addFirstItem');
+                    if (addFirstItemBtn) {
+                        addFirstItemBtn.addEventListener('click', openAddModal);
+                    }
+                    
+                    return;
+                }
+                
+                inventoryToRender.forEach(item => {
+                    const row = document.createElement('tr');
+                    const status = getStockStatus(item.quantity, item.minStock);
+                    const statusClass = {
+                        'In Stock': 'bg-success',
+                        'Low Stock': 'bg-warning',
+                        'Out of Stock': 'bg-danger'
+                    }[status];
+                    
+                    row.innerHTML = `
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="inventory-item-img me-3">
+                                    <i class="fas fa-box text-primary"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">${item.name}</h6>
+                                    <small class="text-muted">${item.description || 'No description'}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>${getCategoryName(item.category)}</td>
+                        <td>NPR ${parseFloat(item.price).toFixed(2)}</td>
+                        <td>${item.quantity} ${item.quantity === 1 ? 'unit' : 'units'}</td>
+                        <td><span class="badge ${statusClass}">${status}</span></td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary me-1 edit-item" data-id="${item.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger delete-item" data-id="${item.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    
+                    inventoryTableBody.appendChild(row);
+                });
+                
+                // Add event listeners to edit and delete buttons
+                document.querySelectorAll('.edit-item').forEach(btn => {
+                    btn.addEventListener('click', () => openEditModal(btn.dataset.id));
+                });
+                
+                document.querySelectorAll('.delete-item').forEach(btn => {
+                    btn.addEventListener('click', () => deleteItem(btn.dataset.id));
+                });
+            }
+            
+            function getStockStatus(quantity, minStock) {
+                if (quantity <= 0) return 'Out of Stock';
+                if (quantity <= minStock) return 'Low Stock';
+                return 'In Stock';
+            }
+            
+            function getCategoryName(category) {
+                const categories = {
+                    'hair': 'Hair Care',
+                    'skin': 'Skin Care',
+                    'makeup': 'Makeup',
+                    'nails': 'Nail Care',
+                    'tools': 'Tools & Equipment'
+                };
+                return categories[category] || category;
+            }
+            
+            function updateStatistics() {
+                const totalProducts = inventory.length;
+                const inStock = inventory.filter(item => item.quantity > 0 && item.quantity > item.minStock).length;
+                const lowStock = inventory.filter(item => item.quantity > 0 && item.quantity <= item.minStock).length;
+                const outOfStock = inventory.filter(item => item.quantity <= 0).length;
+                
+                document.getElementById('totalProducts').textContent = totalProducts;
+                document.getElementById('inStockItems').textContent = inStock;
+                document.getElementById('lowStockItems').textContent = lowStock;
+                document.getElementById('outOfStockItems').textContent = outOfStock;
+            }
+            
+            function openAddModal() {
+                document.getElementById('inventoryModalTitle').textContent = 'Add New Item';
+                inventoryItemForm.reset();
+                document.getElementById('itemId').value = '';
+                inventoryItemModal.show();
+            }
+            
+            function openEditModal(id) {
+                const item = inventory.find(item => item.id === id);
+                if (!item) return;
+                
+                document.getElementById('inventoryModalTitle').textContent = 'Edit Item';
+                document.getElementById('itemId').value = item.id;
+                document.getElementById('itemName').value = item.name;
+                document.getElementById('itemCategory').value = item.category;
+                document.getElementById('itemPrice').value = item.price;
+                document.getElementById('itemQuantity').value = item.quantity;
+                document.getElementById('itemMinStock').value = item.minStock || 5;
+                document.getElementById('itemDescription').value = item.description || '';
+                
+                inventoryItemModal.show();
+            }
+            
+            function saveInventoryItem() {
+                const id = document.getElementById('itemId').value;
+                const name = document.getElementById('itemName').value.trim();
+                const category = document.getElementById('itemCategory').value;
+                const price = parseFloat(document.getElementById('itemPrice').value);
+                const quantity = parseInt(document.getElementById('itemQuantity').value);
+                const minStock = parseInt(document.getElementById('itemMinStock').value);
+                const description = document.getElementById('itemDescription').value.trim();
+                
+                // Validation
+                if (!name || isNaN(price) || isNaN(quantity) || isNaN(minStock)) {
+                    alert('Please fill in all required fields with valid values.');
+                    return;
+                }
+                
+                const itemData = {
+                    id: id || generateId(),
+                    name,
+                    category,
+                    price,
+                    quantity,
+                    minStock,
+                    description: description || ''
+                };
+                
+                if (id) {
+                    // Update existing item
+                    const index = inventory.findIndex(item => item.id === id);
+                    if (index !== -1) {
+                        inventory[index] = itemData;
+                    }
+                } else {
+                    // Add new item
+                    inventory.push(itemData);
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('beautyParlourInventory', JSON.stringify(inventory));
+                
+                // Update UI
+                renderInventoryTable();
+                updateStatistics();
+                inventoryItemModal.hide();
+                
+                // Show success message
+                showAlert('success', `Item ${id ? 'updated' : 'added'} successfully!`);
+            }
+            
+            function deleteItem(id) {
+                if (confirm('Are you sure you want to delete this item? This action cannot be undone.')) {
+                    inventory = inventory.filter(item => item.id !== id);
+                    localStorage.setItem('beautyParlourInventory', JSON.stringify(inventory));
+                    renderInventoryTable();
+                    updateStatistics();
+                    showAlert('success', 'Item deleted successfully!');
+                }
+            }
+            
+            function filterInventory() {
+                const category = categoryFilter.value;
+                const stockStatus = stockFilter.value;
+                const searchTerm = inventorySearch.value.toLowerCase();
+                
+                let filteredItems = [...inventory];
+                
+                // Filter by category
+                if (category) {
+                    filteredItems = filteredItems.filter(item => item.category === category);
+                }
+                
+                // Filter by stock status
+                if (stockStatus) {
+                    filteredItems = filteredItems.filter(item => {
+                        const status = getStockStatus(item.quantity, item.minStock).toLowerCase().replace(' ', '-');
+                        return status === stockStatus;
+                    });
+                }
+                
+                // Filter by search term
+                if (searchTerm) {
+                    filteredItems = filteredItems.filter(item => 
+                        item.name.toLowerCase().includes(searchTerm) || 
+                        (item.description && item.description.toLowerCase().includes(searchTerm)) ||
+                        item.category.toLowerCase().includes(searchTerm)
+                    );
+                }
+                
+                renderInventoryTable(filteredItems);
+            }
+            
+            function generateId() {
+                return 'item-' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            function showAlert(type, message) {
+                // Create alert element
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed top-0 end-0 m-3`;
+                alertDiv.role = 'alert';
+                alertDiv.style.zIndex = '9999';
+                alertDiv.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                `;
+                
+                // Add to body
+                document.body.appendChild(alertDiv);
+                
+                // Auto remove after 3 seconds
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 3000);
+            }
+            
+            // Add sample data if inventory is empty (for demo purposes)
+            if (inventory.length === 0) {
+                const sampleData = [
+                    {
+                        id: 'item-1',
+                        name: 'Shampoo',
+                        category: 'hair',
+                        price: 12.99,
+                        quantity: 15,
+                        minStock: 5,
+                        description: 'Moisturizing shampoo for all hair types'
+                    },
+                    {
+                        id: 'item-2',
+                        name: 'Conditioner',
+                        category: 'hair',
+                        price: 14.99,
+                        quantity: 3,
+                        minStock: 5,
+                        description: 'Nourishing conditioner for smooth hair'
+                    },
+                    {
+                        id: 'item-3',
+                        name: 'Facial Cleanser',
+                        category: 'skin',
+                        price: 18.50,
+                        quantity: 8,
+                        minStock: 3,
+                        description: 'Gentle cleanser for all skin types'
+                    },
+                    {
+                        id: 'item-4',
+                        name: 'Nail Polish Set',
+                        category: 'nails',
+                        price: 24.99,
+                        quantity: 0,
+                        minStock: 2,
+                        description: 'Set of 6 nail polish colors'
+                    },
+                    {
+                        id: 'item-5',
+                        name: 'Hair Dryer',
+                        category: 'tools',
+                        price: 89.99,
+                        quantity: 2,
+                        minStock: 1,
+                        description: 'Professional hair dryer with multiple heat settings'
+                    }
+                ];
+                
+                inventory = sampleData;
+                localStorage.setItem('beautyParlourInventory', JSON.stringify(inventory));
+                renderInventoryTable();
+                updateStatistics();
+            }
+        });
+    </script>
+{% endblock %}
+</body>
+</html>

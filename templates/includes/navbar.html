@@ -1,0 +1,41 @@
+{% load static %}
+
+<div class="container-fluid sticky-top p-0 salon-navbar">
+    <nav class="navbar navbar-expand-lg p-0">
+        
+        <!-- LOGO -->
+        <a href="{% url 'home' %}" class="navbar-brand salon-logo py-4 px-5 me-0">
+            <h1 class="mb-0">
+                <i class="bi bi-scissors"></i> Salon
+            </h1>
+        </a>
+
+        <!-- TOGGLER -->
+        <button class="navbar-toggler me-4" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- MENU -->
+        <div class="collapse navbar-collapse p-3" id="navbarCollapse">
+            <div class="navbar-nav mx-auto">
+                <a href="{% url 'home' %}" class="nav-item nav-link">Home</a>
+                <a href="{% url 'about' %}" class="nav-item nav-link">About Us</a>
+                <a href="{% url 'services' %}" class="nav-item nav-link">Services</a>
+                <a href="{% url 'gallery' %}" class="nav-item nav-link">Gallery</a>
+                <a href="{% url 'appointments' %}" class="nav-item nav-link">Book Appointment</a>
+            </div>
+
+            <!-- AUTH BUTTONS -->
+            <div class="d-flex align-items-center">
+                <a href="{% url 'login' %}" class="btn salon-btn-login me-2">
+                    Login
+                </a>
+
+                <a href="{% url 'register' %}" class="btn salon-btn-register">
+                    Register
+                </a>
+            </div>
+        </div>
+    </nav>
+</div>

@@ -1,0 +1,1081 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Appointment Confirmation - Glamour Touch{% endblock %}
+
+{% block extra_css %}
+<!-- Additional CSS specific to appointment confirmation -->
+<link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+<link href="{% static 'lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
+<link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #ffffff;
+        color: #333;
+    }
+    
+    /* Section */  
+    .appointment-section {
+        padding: 80px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: url("{% static 'img/page-header.jpg' %}") no-repeat center center/cover;
+        background-attachment: fixed;
+    }
+    
+    .appointment-section h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 48px;
+        font-weight: 700;
+        color: #b8860b;
+        margin-bottom: 50px;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+    
+    /* Services Cards */
+    .services {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 25px;
+        margin-bottom: 60px;
+    }
+    
+    .service-card {
+        background: #fffaf0;
+        border: 3px solid #bf9456;
+        border-radius: 25px;
+        width: 160px;
+        height: 180px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.4s, box-shadow 0.4s;
+        cursor: pointer;
+        padding: 15px;
+    }
+    
+    .service-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 15px 30px rgba(184,134,11,0.3);
+    }
+    
+    .service-card img {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 12px;
+    }
+    
+    .service-card p {
+        font-weight: 600;
+        font-size: 16px;
+        color: #bf9456;
+        margin: 0;
+        text-align: center;
+    }
+    
+    /* Form */
+    .appointment-container {
+        background: #fffaf0;
+        padding: 50px;
+        border-radius: 25px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        width: 100%;
+        max-width: 600px;
+        border: 3px solid #bf9456;
+        transition: transform 0.3s;
+    }
+    
+    .appointment-container:hover {
+        transform: translateY(-5px);
+    }
+    
+    .appointment-container h2 {
+        text-align: center;
+        color: #bf9456;
+        margin-bottom: 30px;
+        font-family: 'Playfair Display', serif;
+        font-size: 32px;
+        letter-spacing: 1px;
+    }
+    
+    .appointment-container input,
+    .appointment-container select,
+    .appointment-container textarea {
+        width: 100%;
+        padding: 14px 15px;
+        margin-bottom: 18px;
+        border-radius: 15px;
+        border: 2px solid #bf9456;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        font-family: 'Montserrat', sans-serif;
+        background-color: #fff;
+    }
+    
+    .appointment-container input:focus,
+    .appointment-container select:focus,
+    .appointment-container textarea:focus {
+        border-color: #bf9456;
+        box-shadow: 0 0 8px rgba(184,134,11,0.4);
+        outline: none;
+    }
+    
+    .appointment-container button {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 15px;
+        background: linear-gradient(135deg, #bf9456 0%, #a67c52 100%);
+        color: white;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-family: 'Montserrat', sans-serif;
+        margin-top: 10px;
+    }
+    
+    .appointment-container button:hover {
+        background: linear-gradient(135deg, #a67c52 0%, #8a5f3a 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(184,134,11,0.3);
+    }
+    
+    /* Service Type Boxes */
+    .service-type-box {
+        margin-bottom: 18px;
+        animation: slideDown 0.3s ease;
+    }
+    
+    /* Payment Section */
+    .payment-method {
+        margin-bottom: 20px;
+    }
+    
+    .payment-method label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+        font-size: 16px;
+    }
+    
+    .payment-details {
+        background: #f8f9fa;
+        border: 2px solid #bf9456;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        animation: slideDown 0.3s ease;
+        display: none;
+    }
+    
+    .payment-details h3 {
+        color: #333;
+        margin: 0 0 15px 0;
+        font-size: 18px;
+        border-bottom: 2px solid #bf9456;
+        padding-bottom: 8px;
+    }
+    
+    .payment-details #paymentInfo {
+        color: #555;
+        font-size: 15px;
+        line-height: 1.5;
+    }
+    
+    /* Error Styling */
+    .error-message {
+        color: #dc3545;
+        font-size: 14px;
+        margin-top: -15px;
+        margin-bottom: 15px;
+        padding: 8px 12px;
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        border-radius: 8px;
+        display: block;
+        animation: slideDown 0.3s ease;
+    }
+    
+    input.error, select.error, textarea.error {
+        border-color: #dc3545 !important;
+        box-shadow: 0 0 8px rgba(220,53,69,0.2) !important;
+    }
+    
+    /* Success Styling */
+    .success-message {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 20px 0;
+        text-align: center;
+        animation: slideDown 0.3s ease;
+    }
+    
+    /* Animations */
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    /* Confirmation Modal */
+    .confirmation-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .confirmation-content {
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        animation: slideDown 0.3s ease;
+        border: 3px solid #bf9456;
+    }
+    
+    .confirmation-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    
+    .confirmation-header h3 {
+        color: #bf9456;
+        font-family: 'Playfair Display', serif;
+        font-size: 28px;
+        margin: 15px 0;
+    }
+    
+    .confirmation-body {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+    }
+    
+    .confirmation-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .confirmation-row:last-child {
+        border-bottom: none;
+    }
+    
+    .confirmation-label {
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .confirmation-value {
+        color: #212529;
+        text-align: right;
+    }
+    
+    .confirmation-actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 25px;
+    }
+    
+    .confirmation-btn {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .btn-confirm {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        color: white;
+    }
+    
+    .btn-cancel {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        color: white;
+    }
+    
+    .confirmation-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .appointment-section h1 {
+            font-size: 36px;
+        }
+        
+        .appointment-container {
+            padding: 30px 20px;
+        }
+        
+        .confirmation-actions {
+            flex-direction: column;
+        }
+        
+        .service-card {
+            width: 140px;
+            height: 160px;
+        }
+        
+        .service-card img {
+            width: 50px;
+            height: 50px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .appointment-section {
+            padding: 60px 15px;
+        }
+        
+        .appointment-section h1 {
+            font-size: 28px;
+        }
+        
+        .appointment-container h2 {
+            font-size: 24px;
+        }
+        
+        .services {
+            gap: 15px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Navbar Start -->
+<div class="container-fluid bg-light sticky-top p-0">
+    <nav class="navbar navbar-expand-lg navbar-light p-0">
+        <a href="{% url 'home' %}" class="navbar-brand bg-primary py-4 px-5 me-0">
+            <h1 class="mb-0"><i class="bi bi-scissors"></i>Salon</h1> 
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse"
+            data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse p-3" id="navbarCollapse">
+            <div class="navbar-nav mx-auto" >
+                <a href="{% url 'home' %}" class="nav-item nav-link ">Home</a>
+                <a href="{% url 'about' %}" class="nav-item nav-link">About</a>
+                <a href="{% url 'service' %}" class="nav-item nav-link">Service</a>
+                <a href="{% url 'appointment' %}" class="nav-item nav-link active">Appointment</a>
+                <a href="{% url 'inventory' %}" class="nav-item nav-link">Inventory</a>
+               
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                    <div class="dropdown-menu bg-light mt-2">
+                        <a href="{% url 'gallery' %}" class="dropdown-item">Photo Gallery</a>
+                        <a href="{% url '404' %}" class="dropdown-item">404 Page</a>
+            </button>
+            <div class="collapse navbar-collapse p-3" id="navbarCollapse">
+                <div class="navbar-nav mx-auto" >
+                    <a href="index.html" class="nav-item nav-link ">Home</a>
+                    <a href="about.html" class="nav-item nav-link">About</a>
+                    <a href="service.html" class="nav-item nav-link">Service</a>
+                    <a href="appointment.html" class="nav-item nav-link active">Appointment</a>
+                    <a href="inventory.html" class="nav-item nav-link">Inventory</a>
+                   
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                        <div class="dropdown-menu bg-light mt-2">
+                            <a href="gallery.html" class="dropdown-item">Photo Gallery</a>
+                            <a href="404.html" class="dropdown-item">404 Page</a>
+                        </div>
+                    </div>
+                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar End -->
+
+    <!-- Confirmation Modal -->
+    <div class="confirmation-modal" id="confirmationModal">
+        <div class="confirmation-content">
+            <div class="confirmation-header">
+                <i class="bi bi-check-circle-fill" style="font-size: 48px; color: #28a745;"></i>
+                <h3>Confirm Your Appointment</h3>
+                <p>Please review your appointment details before confirming</p>
+            </div>
+            
+            <div class="confirmation-body" id="confirmationDetails">
+                <!-- Details will be inserted here by JavaScript -->
+            </div>
+            
+            <div class="confirmation-actions">
+                <button type="button" class="confirmation-btn btn-confirm" id="confirmBooking">
+                    <i class="bi bi-check-circle"></i> Confirm Booking
+                </button>
+                <button type="button" class="confirmation-btn btn-cancel" id="cancelBooking">
+                    <i class="bi bi-x-circle"></i> Edit Details
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <section class="appointment-section">
+        <h1>Book Your Appointment</h1>
+        
+        <div class="appointment-container">
+            <h2>Reserve Your Spot</h2>
+            <form id="appointmentForm" onsubmit="event.preventDefault(); validateAndShowConfirmation();">
+                <input type="text" name="name" id="name" placeholder="Full Name" required>
+                <input type="email" name="email" id="email" placeholder="Email Address" required>
+                <input type="tel" name="phone" id="phone" placeholder="Phone Number" required pattern="[0-9]{10}" title="Please enter 10-digit phone number">
+                
+                <select name="service" id="service" required>
+                    <option value="">Select Service</option>
+                    <option value="haircut">Haircut</option>
+                    <option value="manicure">Manicure</option>
+                    <option value="pedicure">Pedicure</option>
+                    <option value="makeup">Makeup</option>
+                    <option value="skincare">Skincare</option>
+                    <option value="facial">Facial</option>
+                    <option value="nailextension">Nail Extension</option>
+                    <option value="styling">Hair Styling</option>
+                </select>
+                
+                <!-- Service Type Boxes -->
+                <div class="service-type-box" id="haircutBox" style="display:none;">
+                    <select name="haircutType" id="haircutType">
+                        <option value="">Select Haircut Type</option>
+                        <option value="straight">Straight Cut</option>
+                        <option value="ucut">U-Cut</option>
+                        <option value="vcut">V-Cut</option>
+                        <option value="layers">Long Layers</option>
+                        <option value="butterfly">Butterfly Cut</option>
+                        <option value="wolf">Wolf Cut</option>
+                        <option value="bob">Bob Cut</option>
+                    </select>
+                </div>
+                
+                <div class="service-type-box" id="makeupBox" style="display:none;">
+                    <select name="makeupType" id="makeupType">
+                        <option value="">Select Makeup Type</option>
+                        <option value="bridal">Bridal Makeup</option>
+                        <option value="party">Party Makeup</option>
+                        <option value="casual">Casual Makeup</option>
+                        <option value="glam">Glam Makeup</option>
+                    </select>
+                </div>
+                
+                <div class="service-type-box" id="pedicureBox" style="display:none;">
+                    <select name="pedicureType" id="pedicureType">
+                        <option value="">Select Pedicure Type</option>
+                        <option value="basic">Basic Pedicure</option>
+                        <option value="spa">Spa Pedicure</option>
+                        <option value="gel">Gel Pedicure</option>
+                    </select>
+                </div>
+                
+                <div class="service-type-box" id="manicureBox" style="display:none;">
+                    <select name="manicureType" id="manicureType">
+                        <option value="">Select Manicure Type</option>
+                        <option value="basic">Basic Manicure</option>
+                        <option value="gel">Gel Manicure</option>
+                        <option value="spa">Spa Manicure</option>
+                    </select>
+                </div>
+                
+                <div class="service-type-box" id="skincareBox" style="display:none;">
+                    <select name="skincareType" id="skincareType">
+                        <option value="">Select Skincare Type</option>
+                        <option value="basic">Basic Skincare</option>
+                        <option value="acne">Acne Care Skincare</option>
+                        <option value="facial">Facial Treatment</option>
+                    </select>
+                </div>
+                
+                <div class="service-type-box" id="nailextensionBox" style="display:none;">
+                    <select name="nailextensionType" id="nailextensionType">
+                        <option value="">Select Nail Extension Type</option>
+                        <option value="gel">Gel Nail Extension</option>
+                        <option value="acrylic">Acrylic Nails</option>
+                    </select>
+                </div>
+                
+                <input type="date" name="date" id="date" required min="">
+                <input type="time" name="time" id="time" required min="09:00" max="18:00">
+                
+                <textarea name="notes" id="notes" rows="4" placeholder="Additional Notes (optional)" maxlength="200"></textarea>
+                
+                <div class="payment-method">
+                    <label for="payment">Payment Method:</label>
+                    <select name="payment" id="payment" required>
+                        <option value="">Select Payment Method</option>
+                        <option value="cash">Cash</option>
+                        <option value="card">Credit/Debit Card</option>
+                        <option value="digital">Digital Payment (Esewa/Khalti)</option>
+                        <option value="bank">Bank Transfer</option>
+                    </select>
+                </div>
+                
+                <div id="paymentDetails" class="payment-details">
+                    <h3>Payment Method Details</h3>
+                    <div id="paymentInfo"></div>
+                </div>
+                
+                <button type="submit" id="submitBtn">Book Now</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        // Service name mapping (matches confirmation page)
+        const services = {
+            'haircut': 'Haircut',
+            'manicure': 'Manicure',
+            'pedicure': 'Pedicure', 
+            'makeup': 'Makeup',
+            'skincare': 'Skincare',
+            'facial': 'Facial',
+            'nailextension': 'Nail Extension',
+            'styling': 'Hair Styling'
+        };
+
+        // Service type mappings
+        const serviceTypes = {
+            'haircut': {
+                'straight': 'Straight Cut',
+                'ucut': 'U-Cut',
+                'vcut': 'V-Cut',
+                'layers': 'Long Layers',
+                'butterfly': 'Butterfly Cut',
+                'wolf': 'Wolf Cut',
+                'bob': 'Bob Cut'
+            },
+            'makeup': {
+                'bridal': 'Bridal Makeup',
+                'party': 'Party Makeup',
+                'casual': 'Casual Makeup',
+                'glam': 'Glam Makeup'
+            },
+            'pedicure': {
+                'basic': 'Basic Pedicure',
+                'spa': 'Spa Pedicure',
+                'gel': 'Gel Pedicure'
+            },
+            'manicure': {
+                'basic': 'Basic Manicure',
+                'gel': 'Gel Manicure',
+                'spa': 'Spa Manicure'
+            },
+            'skincare': {
+                'basic': 'Basic Skincare',
+                'acne': 'Acne Care Skincare',
+                'facial': 'Facial Treatment'
+            },
+            'nailextension': {
+                'gel': 'Gel Nail Extension',
+                'acrylic': 'Acrylic Nails'
+            }
+        };
+
+        // Set minimum date to today
+        document.getElementById('date').min = new Date().toISOString().split('T')[0];
+
+        // DOM elements
+        const appointmentForm = document.getElementById('appointmentForm');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const confirmationDetails = document.getElementById('confirmationDetails');
+        const confirmBookingBtn = document.getElementById('confirmBooking');
+        const cancelBookingBtn = document.getElementById('cancelBooking');
+        const serviceSelect = document.getElementById('service');
+        const paymentSelect = document.getElementById('payment');
+        const paymentDetails = document.getElementById('paymentDetails');
+        const paymentInfo = document.getElementById('paymentInfo');
+
+        // Service type boxes
+        const serviceBoxes = {
+            'haircut': document.getElementById('haircutBox'),
+            'makeup': document.getElementById('makeupBox'),
+            'pedicure': document.getElementById('pedicureBox'),
+            'manicure': document.getElementById('manicureBox'),
+            'skincare': document.getElementById('skincareBox'),
+            'nailextension': document.getElementById('nailextensionBox')
+        };
+
+        // Service type selects
+        const serviceTypeSelects = {
+            'haircut': document.getElementById('haircutType'),
+            'makeup': document.getElementById('makeupType'),
+            'pedicure': document.getElementById('pedicureType'),
+            'manicure': document.getElementById('manicureType'),
+            'skincare': document.getElementById('skincareType'),
+            'nailextension': document.getElementById('nailextensionType')
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupEventListeners();
+            console.log('Appointment booking system initialized');
+        });
+
+        // Setup all event listeners
+        function setupEventListeners() {
+            // Service selection
+            serviceSelect.addEventListener('change', handleServiceChange);
+            
+            // Payment method selection
+            paymentSelect.addEventListener('change', handlePaymentChange);
+            
+            // Confirmation modal buttons
+            confirmBookingBtn.addEventListener('click', handleConfirmation);
+            cancelBookingBtn.addEventListener('click', closeConfirmationModal);
+            
+            // Close modal when clicking outside
+            confirmationModal.addEventListener('click', function(e) {
+                if (e.target === confirmationModal) {
+                    closeConfirmationModal();
+                }
+            });
+            
+            // Real-time validation
+            document.querySelectorAll('#appointmentForm input, #appointmentForm select, #appointmentForm textarea').forEach(field => {
+                field.addEventListener('blur', function() {
+                    validateField(this.id);
+                });
+            });
+        }
+
+        // Handle service selection change
+        function handleServiceChange() {
+            const selectedService = serviceSelect.value;
+            
+            // Hide all service type boxes
+            Object.values(serviceBoxes).forEach(box => {
+                box.style.display = 'none';
+            });
+            
+            // Show relevant service type box
+            if (serviceBoxes[selectedService]) {
+                serviceBoxes[selectedService].style.display = 'block';
+            }
+            
+            // Clear service type validation
+            clearError('serviceType');
+        }
+
+        // Handle payment method change
+        function handlePaymentChange() {
+            const selectedPayment = paymentSelect.value;
+            
+            if (selectedPayment) {
+                paymentDetails.style.display = 'block';
+                
+                const paymentDetailsContent = {
+                    'cash': '💵 <strong>Cash Payment</strong><br>You can pay in cash at our salon after the service is completed. Please bring exact change if possible.',
+                    'card': '💳 <strong>Credit/Debit Card</strong><br>We accept all major credit and debit cards (Visa, Mastercard). Card payment can be made at the salon.',
+                    'digital': '📱 <strong>Digital Payment (Esewa/Khalti)</strong><br>You can pay using Esewa or Khalti mobile wallets. QR code will be available at the salon.',
+                    'bank': '🏦 <strong>Bank Transfer</strong><br>Direct bank transfer to our business account. Account details will be provided during confirmation call.'
+                };
+                
+                paymentInfo.innerHTML = paymentDetailsContent[selectedPayment] || '';
+            } else {
+                paymentDetails.style.display = 'none';
+            }
+        }
+
+        // Main validation and confirmation function
+        function validateAndShowConfirmation() {
+            clearAllErrors();
+            
+            // Get form values
+            const formData = getFormData();
+            
+            // Validate all fields
+            const isValid = validateAllFields(formData);
+            
+            if (!isValid) {
+                // Scroll to first error
+                const firstError = document.querySelector('.error-message');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                return;
+            }
+            
+            // Show confirmation modal
+            showConfirmationModal(formData);
+        }
+
+        // Get all form data
+        function getFormData() {
+            const service = serviceSelect.value;
+            let serviceType = '';
+            let serviceTypeValue = '';
+            
+            // Get service type if applicable
+            if (serviceTypeSelects[service]) {
+                const typeSelect = serviceTypeSelects[service];
+                serviceType = typeSelect.value;
+                serviceTypeValue = serviceTypes[service]?.[serviceType] || serviceType;
+            }
+            
+            return {
+                name: document.getElementById('name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                service: service,
+                serviceDisplay: services[service] || service,
+                serviceType: serviceType,
+                serviceTypeValue: serviceTypeValue,
+                date: document.getElementById('date').value,
+                time: document.getElementById('time').value,
+                notes: document.getElementById('notes').value.trim(),
+                payment: paymentSelect.value
+            };
+        }
+
+        // Validate all fields
+        function validateAllFields(data) {
+            let isValid = true;
+            
+            // Name validation
+            if (!data.name || data.name.length < 3) {
+                showError('name', 'Name must be at least 3 characters long');
+                isValid = false;
+            }
+            
+            // Email validation
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!data.email || !emailRegex.test(data.email)) {
+                showError('email', 'Please enter a valid email address');
+                isValid = false;
+            }
+            
+            // Phone validation
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!data.phone || !phoneRegex.test(data.phone)) {
+                showError('phone', 'Please enter a valid 10-digit phone number');
+                isValid = false;
+            }
+            
+            // Service validation
+            if (!data.service) {
+                showError('service', 'Please select a service');
+                isValid = false;
+            }
+            
+            // Service type validation (if service has types)
+            if (serviceTypeSelects[data.service] && !data.serviceType) {
+                showError('serviceType', 'Please select a service type');
+                isValid = false;
+            }
+            
+            // Date validation
+            if (!data.date) {
+                showError('date', 'Please select an appointment date');
+                isValid = false;
+            } else {
+                const selectedDate = new Date(data.date);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                if (selectedDate < today) {
+                    showError('date', 'Please select a future date');
+                    isValid = false;
+                } else if (selectedDate.getDay() === 0) { // Sunday
+                    showError('date', 'We are closed on Sundays. Please select another day');
+                    isValid = false;
+                }
+            }
+            
+            // Time validation
+            if (!data.time) {
+                showError('time', 'Please select an appointment time');
+                isValid = false;
+            } else {
+                const [hour, minute] = data.time.split(':');
+                const hourNum = parseInt(hour);
+                
+                if (hourNum < 9 || hourNum >= 18) {
+                    showError('time', 'Please select a time between 9:00 AM and 6:00 PM');
+                    isValid = false;
+                } else if (hourNum === 13) {
+                    showError('time', 'Lunch break: 1:00 PM - 2:00 PM. Please select a different time');
+                    isValid = false;
+                }
+            }
+            
+            // Payment validation
+            if (!data.payment) {
+                showError('payment', 'Please select a payment method');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+
+        // Show confirmation modal with details
+        function showConfirmationModal(data) {
+            // Format date
+            const formattedDate = new Date(data.date).toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            // Format time
+            const [hours, minutes] = data.time.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour > 12 ? hour - 12 : hour;
+            const formattedTime = `${displayHour}:${minutes} ${ampm}`;
+            
+            // Build confirmation HTML
+            let confirmationHTML = `
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Customer Name:</span>
+                    <span class="confirmation-value">${data.name}</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Email:</span>
+                    <span class="confirmation-value">${data.email}</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Phone:</span>
+                    <span class="confirmation-value">${data.phone}</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Service:</span>
+                    <span class="confirmation-value">${data.serviceDisplay}</span>
+                </div>`;
+            
+            if (data.serviceTypeValue) {
+                confirmationHTML += `
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Service Type:</span>
+                    <span class="confirmation-value">${data.serviceTypeValue}</span>
+                </div>`;
+            }
+            
+            confirmationHTML += `
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Date:</span>
+                    <span class="confirmation-value">${formattedDate}</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Time:</span>
+                    <span class="confirmation-value">${formattedTime}</span>
+                </div>
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Payment Method:</span>
+                    <span class="confirmation-value">${getPaymentDisplay(data.payment)}</span>
+                </div>`;
+            
+            if (data.notes) {
+                confirmationHTML += `
+                <div class="confirmation-row">
+                    <span class="confirmation-label">Notes:</span>
+                    <span class="confirmation-value">${data.notes}</span>
+                </div>`;
+            }
+            
+            // Insert into modal
+            confirmationDetails.innerHTML = confirmationHTML;
+            
+            // Store data for later use
+            confirmationModal.dataset.formData = JSON.stringify(data);
+            
+            // Show modal
+            confirmationModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Get payment display name
+        function getPaymentDisplay(payment) {
+            const payments = {
+                'cash': 'Cash',
+                'card': 'Credit/Debit Card',
+                'digital': 'Digital Payment (Esewa/Khalti)',
+                'bank': 'Bank Transfer'
+            };
+            return payments[payment] || payment;
+        }
+
+        // Handle confirmation
+        function handleConfirmation() {
+            const formData = JSON.parse(confirmationModal.dataset.formData);
+            
+            // Build URL parameters for confirmation page
+            const params = new URLSearchParams({
+                name: encodeURIComponent(formData.name),
+                email: encodeURIComponent(formData.email),
+                phone: encodeURIComponent(formData.phone),
+                service: encodeURIComponent(formData.service),
+                serviceType: encodeURIComponent(formData.serviceTypeValue),
+                date: encodeURIComponent(formData.date),
+                time: encodeURIComponent(formData.time),
+                notes: encodeURIComponent(formData.notes || ''),
+                payment: encodeURIComponent(formData.payment)
+            });
+            
+            // Close modal
+            closeConfirmationModal();
+            
+            // Redirect to confirmation page
+            window.location.href = `confirmation.html?${params.toString()}`;
+        }
+
+        // Close confirmation modal
+        function closeConfirmationModal() {
+            confirmationModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Validate individual field
+        function validateField(fieldId) {
+            clearError(fieldId);
+            
+            const field = document.getElementById(fieldId);
+            const value = field.value.trim();
+            let hasError = false;
+            
+            switch(fieldId) {
+                case 'name':
+                    if (!value || value.length < 3) {
+                        showError(fieldId, 'Name must be at least 3 characters long');
+                        hasError = true;
+                    }
+                    break;
+                    
+                case 'email':
+                    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                    if (!value || !emailRegex.test(value)) {
+                        showError(fieldId, 'Please enter a valid email address');
+                        hasError = true;
+                    }
+                    break;
+                    
+                case 'phone':
+                    const phoneRegex = /^[0-9]{10}$/;
+                    if (!value || !phoneRegex.test(value)) {
+                        showError(fieldId, 'Please enter a valid 10-digit phone number');
+                        hasError = true;
+                    }
+                    break;
+                    
+                case 'date':
+                    if (!value) {
+                        showError(fieldId, 'Please select an appointment date');
+                        hasError = true;
+                    }
+                    break;
+                    
+                case 'time':
+                    if (!value) {
+                        showError(fieldId, 'Please select an appointment time');
+                        hasError = true;
+                    }
+                    break;
+            }
+            
+            return !hasError;
+        }
+
+        // Show error message
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            if (!field) return;
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            errorDiv.id = `error-${fieldId}`;
+            
+            // Remove existing error
+            clearError(fieldId);
+            
+            // Insert after the field
+            field.parentNode.insertBefore(errorDiv, field.nextSibling);
+            field.classList.add('error');
+        }
+
+        // Clear specific error
+        function clearError(fieldId) {
+            const errorDiv = document.getElementById(`error-${fieldId}`);
+            if (errorDiv) {
+                errorDiv.remove();
+            }
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.classList.remove('error');
+            }
+        }
+
+        // Clear all errors
+        function clearAllErrors() {
+            document.querySelectorAll('.error-message').forEach(error => error.remove());
+            document.querySelectorAll('.error').forEach(field => field.classList.remove('error'));
+        }
+
+        // Service type validation error (for dynamic service types)
+        function showServiceTypeError(message) {
+            showError('serviceType', message);
+        }
+
+        // Format time for display (used in confirmation modal)
+        function formatTimeForDisplay(timeStr) {
+            const [hours, minutes] = timeStr.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour > 12 ? hour - 12 : hour;
+            return `${displayHour}:${minutes} ${ampm}`;
+        }
+
+        // Format date for display (used in confirmation modal)
+        function formatDateForDisplay(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+        }
+    </script>
+</body>
+</html>
