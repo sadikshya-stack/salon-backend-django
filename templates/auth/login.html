@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Login & Register - Glamour Touch{% endblock %}</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Playfair+Display:wght@500&family=Work+Sans&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
+
+    <!-- Bootstrap Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body class="loginb">
+
+    <!-- Auth Section Start -->
+    <div class="container-fluid py-5">
+        <div class="container">
+
+            <div class="row justify-content-center">
+                <div class="col-lg-5 wow fadeInUp" data-wow-delay="0.2s">
+
+                    <div class="auth-card shadow-lg">
+
+                        <h1 class="font-dancing-script text-primary text-center mb-4">Welcome</h1>
+
+                        <!-- Toggle Buttons -->
+                        <div class="text-center mb-4">
+                            <button id="btnLoginForm" class="btn btn-outline-primary me-2 active" style="border-color: #D4AF37; color: #D4AF37;">Login</button>
+                            <button id="btnRegisterForm" class="btn btn-outline-secondary" style="border-color: #D4AF37; color: #D4AF37;">Register</button>
+                        </div>
+
+                        <!-- Login Form -->
+                        <div id="loginSection">
+                            <h3 class="text-center mb-4">Welcome Back</h3>
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label>Email</label>
+                                    <input type="email" class="form-control" placeholder="Enter your email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Password</label>
+                                    <input type="password" class="form-control" placeholder="Enter your password" required>
+                                </div>
+                                <button type="submit" class="btn w-100 py-2" style="background-color: #D4AF37; border: none; color: #000; font-weight: 600;">Sign In</button>
+                                <p class="text-center mt-3">Don't have an account? <a href="#" id="showRegister" style="color: #D4AF37; text-decoration: none;">Register here</a></p>
+                            </form>
+                        </div>
+
+                        <!-- Register Form -->
+                        <div id="registerSection" style="display: none;">
+                            <h3 class="text-center mb-4">Create Account</h3>
+                            <form id="registerForm">
+                                <div class="mb-3">
+                                    <label>Full Name</label>
+                                    <input type="text" class="form-control" placeholder="Enter your name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Email</label>
+                                    <input type="email" class="form-control" placeholder="Enter email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Phone</label>
+                                    <input type="text" class="form-control" placeholder="Enter phone" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Password</label>
+                                    <input type="password" class="form-control" placeholder="Create password" required>
+                                </div>
+                                <button type="submit" class="btn w-100 py-2" style="background-color: #D4AF37; border: none; color: #000; font-weight: 600;">Register</button>
+                                <p class="text-center mt-3">Already have an account? <a href="#" id="showLogin" style="color: #D4AF37; text-decoration: none;">Sign in</a></p>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Auth Section End -->
+
+    <!-- JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
+    {% block extra_js %}
+    <script>
+        new WOW().init();
+
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const returnUrl = urlParams.get('returnUrl');
+        const message = urlParams.get('message');
+        const activeTab = localStorage.getItem('activeTab') || urlParams.get('tab') || 'login';
+
+        // Display message if provided
+        if (message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'alert alert-info alert-dismissible fade show';
+            messageDiv.innerHTML = `
+                <strong>Notice:</strong> ${decodeURIComponent(message)}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            const authCard = document.querySelector('.auth-card');
+            if (authCard) {
+                authCard.insertBefore(messageDiv, authCard.firstChild);
+            }
+        }
+
+        // Set active tab based on localStorage or URL parameter
+        if (activeTab === 'register') {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('registerSection').style.display = 'block';
+            document.getElementById('btnLoginForm').classList.remove('active');
+            document.getElementById('btnRegisterForm').classList.add('active');
+        }
+
+        // Toggle between login and register forms
+        document.getElementById('showRegister').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('registerSection').style.display = 'block';
+            document.getElementById('btnLoginForm').classList.remove('active');
+            document.getElementById('btnRegisterForm').classList.add('active');
+        });
+
+        document.getElementById('showLogin').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('registerSection').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'block';
+            document.getElementById('btnRegisterForm').classList.remove('active');
+            document.getElementById('btnLoginForm').classList.add('active');
+        });
+
+        // Button toggles
+        document.getElementById('btnLoginForm').addEventListener('click', function() {
+            document.getElementById('registerSection').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'block';
+            this.classList.add('active');
+            document.getElementById('btnRegisterForm').classList.remove('active');
+        });
+
+        document.getElementById('btnRegisterForm').addEventListener('click', function() {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('registerSection').style.display = 'block';
+            this.classList.add('active');
+            document.getElementById('btnLoginForm').classList.remove('active');
+        });
+
+        // Registration form submission
+        document.getElementById("registerForm").onsubmit = function(e) {
+            e.preventDefault();
+            // Here you would typically save the registration data
+            // After successful registration, redirect based on returnUrl or default
+            const redirectUrl = returnUrl ? decodeURIComponent(returnUrl) : 'index.html';
+            localStorage.removeItem('activeTab');
+            window.location.href = redirectUrl;
+            return false;
+        };
+
+        // Login form submission
+        document.getElementById("loginForm").onsubmit = function(e) {
+            e.preventDefault();
+            // Here you would typically validate the login credentials
+            // After successful login, redirect based on returnUrl or default
+            const redirectUrl = returnUrl ? decodeURIComponent(returnUrl) : 'index.html';
+            localStorage.removeItem('activeTab');
+            window.location.href = redirectUrl;
+            return false;
+        };
+    </script>
+    {% endblock %}
+
+</body>
+
+</html>

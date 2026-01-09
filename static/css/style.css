@@ -805,3 +805,183 @@ html, body {
             justify-content: center;
             font-weight: bold;
         }
+        /*Appointment*/
+         .appointment-section {
+    padding: 80px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: url("../img/page-header.jpg") no-repeat center center/cover;
+    background-attachment: fixed;
+       }
+    .appointment-section h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 48px;
+        font-weight: 700;
+        color: #b8860b;
+        margin-bottom: 50px;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+    /* Services Cards */
+    .services {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 25px;
+        margin-bottom: 60px;
+    }
+    .service-card {
+        background: #fffaf0;
+        border: 3px solid #bf9456;
+        border-radius: 25px;
+        width: 160px;
+        height: 180px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.4s, box-shadow 0.4s;
+        cursor: pointer;
+        padding: 15px;
+    }
+    .service-card:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 15px 30px rgba(184,134,11,0.3);
+    }
+    .service-card img {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 12px;
+    }
+    .service-card p {
+        font-weight: 600;
+        font-size: 16px;
+        color: #bf9456;
+        margin: 0;
+        text-align: center;
+    }
+    /* Form */
+    .appointment-container {
+        background: #fffaf0;
+        padding: 50px;
+        border-radius: 25px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        width: 100%;
+        max-width: 600px;
+        border: 3px solid #bf9456;
+        transition: transform 0.3s;
+    }
+    .appointment-container:hover {
+        transform: translateY(-5px);
+    }
+    .appointment-container h2 {
+        text-align: center;
+        color: #bf9456;
+        margin-bottom: 30px;
+        font-family: 'Playfair Display', serif;
+        font-size: 32px;
+        letter-spacing: 1px;
+    }
+    .appointment-container input,
+    .appointment-container select,
+    .appointment-container textarea {
+        width: 100%;
+        padding: 14px 15px;
+        margin-bottom: 18px;
+        border-radius: 15px;
+        border: 2px solid #bf9456;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        font-family: 'Montserrat', sans-serif;
+    }
+    .appointment-container input:focus,
+    .appointment-container select:focus,
+    .appointment-container textarea:focus {
+        border-color: #bf9456;
+        box-shadow: 0 0 8px rgba(184,134,11,0.4);
+        outline: none;
+    }
+    .appointment-container button {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 15px;
+        background: #bf9456;
+        color: white;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+        font-family: 'Montserrat', sans-serif;
+    }
+    .appointment-container button:hover {
+        background: #bf9456;
+        transform: scale(1.02);
+    }
+    /* Responsive */
+    @media (max-width: 650px) {
+        .services {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .service-card {
+            width: 180px;
+            height: 200px;
+        }
+    }
+
+
+/* Error animations */
+@keyframes slideDown {
+  from {opacity:0; transform:translateY(-10px);}
+  to {opacity:1; transform:translateY(0);}
+}
+.error-message {
+  animation: slideDown 0.3s ease;
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  display:block;
+}
+
+input.error, select.error, textarea.error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 8px rgba(220,53,69,0.2) !important;
+}
+
+/*Login & Register */
+.loginb{
+    background: url('../img/hero-slider-1.jpg') center/cover no-repeat fixed;
+}
+
+.auth-card {
+            background: rgba(255, 255, 255, 0.88);
+            border-radius: 12px;
+            padding: 40px;
+            backdrop-filter: blur(6px);
+            animation: fadeInUp 0.8s;
+        }
+
+        .tab-btn {
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            padding-bottom: 5px;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            color: #d63384;
+            border-bottom: 3px solid #d63384;
+        }
+
+        .hidden {
+            display: none;
+        }

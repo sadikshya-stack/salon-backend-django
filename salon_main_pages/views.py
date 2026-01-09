@@ -117,8 +117,8 @@ def login_view(request):
             login(request, user)
             return redirect('dashboard')
         else:
-            return render(request, 'login.html', {'error': 'Invalid username or password'})
-    return render(request, 'login.html')
+            return render(request, 'auth/login.html', {'error': 'Invalid username or password'})
+    return render(request, 'auth/login.html')
 
 
 # Logout Page
