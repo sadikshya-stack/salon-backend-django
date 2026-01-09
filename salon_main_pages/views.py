@@ -151,32 +151,55 @@ def logout_view(request):
     return redirect('login')
 
 
-# REGISTER PAGE
+
+
+
 def register_view(request):
     if request.method == 'POST':
-        full_name = request.POST.get('full_name')
-        username = request.POST.get('username')
+        full_name = request.POST.get('full_name', '').strip()
         email = request.POST.get('email')
         password = request.POST.get('password')
-        phone = request.POST.get('phone')  # optional if you want to store it in UserProfile later
+        confirm_password = request.POST.get('confirm_password')
 
-        # Check if username or email already exists
-        if User.objects.filter(username=username).exists():
-            return render(request, 'login.html', {'register_error': 'Username already exists'})
+        if password != confirm_password:
+            return render(request, 'auth/register.html', {
+                'register_error': 'Passwords do not match'
+            })
+
+        
         if User.objects.filter(email=email).exists():
-            return render(request, 'login.html', {'register_error': 'Email already exists'})
+            return render(request, 'auth/register.html', {
+                'register_error': 'Email already exists'
+            })
 
-        # Create user
-        user = User.objects.create_user(username=username, password=password, email=email)
-        user.first_name = full_name
+        
+        name_parts = full_name.split()
+
+        first_name = name_parts[0] if len(name_parts) > 0 else ''
+        last_name = ' '.join(name_parts[1:]) if len(name_parts) > 1 else ''
+
+        
+        username = first_name.lower()
+
+        
+        if User.objects.filter(username=username).exists():
+            username = f"{username}_{User.objects.count()}"
+
+        
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        user.first_name = first_name
+        user.last_name = last_name
         user.save()
 
-        # Log the user in automatically
         login(request, user)
-
         return redirect('dashboard')
 
-    return render(request, 'login.html')
+    return render(request, 'auth/register.html')
 
 
 # Admin Dashboard
