@@ -3,108 +3,7 @@
 
 {% block title %}Contact Us - Glamour Touch{% endblock %}
 
-{% block extra_css %}
-<!-- Additional CSS specific to contact page -->
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Playfair+Display:wght@500&family=Work+Sans&display=swap" rel="stylesheet">
-<link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
-<link href="{% static 'lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
-<link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
-
-<style>
-    /* Contact Form Styles */
-    .contact-form .form-control {
-        height: 50px;
-        border-radius: 0;
-        border: 1px solid #dee2e6;
-        margin-bottom: 20px;
-    }
-    
-    .contact-form textarea.form-control {
-        height: 150px;
-        padding-top: 15px;
-        resize: none;
-    }
-    
-    .btn-primary {
-        background: var(--primary);
-        border: none;
-        padding: 12px 30px;
-        font-weight: 600;
-        transition: all 0.3s;
-    }
-    
-    .btn-primary:hover {
-        background: var(--primary-dark);
-        transform: translateY(-2px);
-    }
-    
-    .contact-info {
-        padding: 30px;
-        background: #fff;
-        border-radius: 5px;
-        box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
-        height: 100%;
-    }
-    
-    .contact-info i {
-        width: 50px;
-        height: 50px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--primary-light);
-        color: var(--primary);
-        border-radius: 50%;
-        margin-bottom: 20px;
-    }
-    
-    .contact-info h4 {
-        font-size: 20px;
-        margin-bottom: 15px;
-        color: var(--dark);
-    }
-    
-    .contact-info p {
-        color: #6c757d;
-        margin-bottom: 0;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-    <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
-    <!-- Spinner End -->
-
-
-    <!-- Navbar Start -->
-    <div class="container-fluid bg-light sticky-top p-0">
-        <nav class="navbar navbar-expand-lg navbar-light p-0">
-            <a href="{% url 'login' %}" class="navbar-brand bg-primary py-4 px-5 me-0">
-                <h1 class="mb-0"><i class="bi bi-scissors"></i>Salon</h1>
-            </a>
-            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse"
-                data-bs-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse p-3" id="navbarCollapse">
-                <div class="navbar-nav mx-auto">
-                    <a href="{% url 'login' %}" class="nav-item nav-link">Home</a>
-                    <a href="{% url 'about' %}" class="nav-item nav-link">About</a>
-                    <a href="{% url 'services' %}" class="nav-item nav-link">Services</a>
-                    <a href="{% url 'gallery' %}" class="nav-item nav-link">Photo Gallery</a>
-                    <a href="{% url 'contact' %}" class="nav-item nav-link active">Contact</a>
-                     <a href="{% url 'appointments' %}" class="nav-item nav-link">Appointment</a>
-                </div>
-            </div>
-        </nav>
-    </div>
-    <!-- Navbar End -->
-
 
     <!-- Hero Start -->
     <div class="container-fluid bg-light page-header py-5 mb-5">
@@ -167,67 +66,10 @@
     </div>
     <!-- Contact End -->
 
-
-    <!-- Footer Start -->
-    <div class="container-fluid footer position-relative bg-dark text-white-50 py-5 mt-5 wow fadeIn" data-wow-delay="0.2s">
-        <div class="container py-5">
-            <div class="row g-5">
-                <div class="col-lg-6 pe-lg-5">
-                    <a href="{% url 'home' %}" class="navbar-brand">
-                        <h1 class="display-5 text-primary mb-0"><i class="bi bi-scissors"></i>Salon</h1>
-                    </a>
-                    <p>“We provide high-quality services with care and professionalism. 
-                        Our goal is to ensure comfort, satisfaction, and excellent results for every customer.”</p>
-                    <p class="mb-2"><i class="fa fa-map-marker-alt me-2"></i>Pokhara,Nepal</p>
-                    <p class="mb-2"><i class="fa fa-phone-alt me-2"></i>9846025702</p>
-                    <p class="mb-2"><i class="fa fa-phone-alt me-2"></i>9846856318</p>
-                    <p><i class="fa fa-envelope me-2"></i>glamourtouch58@gmail.com</p>
-                </div>
-                <div class="col-lg-6 ps-lg-5">
-                    <div class="row g-4">
-                        <div class="col-sm-6">
-                            <h5 class="text-primary mb-4">Quick Links</h5>
-                            <a class="btn btn-link text-white-50" href="{% url 'about' %}">About Us</a>
-                            <a class="btn btn-link text-white-50" href="{% url 'contact' %}">Contact Us</a>
-                            <a class="btn btn-link text-white-50" href="{% url 'services' %}">Our Services</a>
-                            <a class="btn btn-link text-white-50" href="products.html">Products</a>
-                            <a class="btn btn-link text-white-50" href="{% url 'appointments' %}">Book Appointment</a>
-                        </div>
-                        <div class="col-sm-12">
-                            <p class="mb-0">“We deliver quality service with care, comfort, and attention to detail.”</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Footer End -->
-
-
-    <!-- Copyright Start -->
-    <div class="container-fluid bg-dark text-white border-top border-secondary py-4 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                    &copy; <a class="border-bottom" href="#">Glamour Touch</a>, All Right Reserved.
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Copyright End -->
-
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 {% endblock %}
 
 {% block extra_js %}
 <!-- Additional JS specific to contact page -->
-<script src="{% static 'lib/wow/wow.min.js' %}"></script>
-<script src="{% static 'lib/easing/easing.min.js' %}"></script>
-<script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
-<script src="{% static 'lib/lightbox/js/lightbox.min.js' %}"></script>
-<script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
 
 <script>
     // Initialize form validation

@@ -85,6 +85,17 @@ def contact(request):
     return render(request, "contact.html", context)
 
 
+# Products Page
+def products(request):
+    context = {
+        "title": "Contact Us",
+        "address": "Kathmandu, Nepal",
+        "phone": "+977-98XXXXXXXX",
+        "email": "info@beautyparlour.com"
+    }
+    return render(request, "products.html", context)
+
+
 # Dashboard Page
 def dashboard(request):
     context = {
