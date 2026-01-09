@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 
 # Home Page
 def home(request):
@@ -107,18 +109,35 @@ def dashboard(request):
     return render(request, "dashboard.html", context)
 
 
-# Login Page
+
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        email = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
+
+        user = authenticate(request, username=email, password=password)
+
         if user is not None:
+            if user.role != 'customer':
+                return render(request, 'auth/login.html', {
+                    'error': 'Only customers are allowed to login here.'
+                })
+
+            if not user.is_active:
+                return render(request, 'auth/login.html', {
+                    'error': 'Your account is inactive.'
+                })
+
             login(request, user)
-            return redirect('dashboard')
+            return redirect('dashboard')  # customer dashboard
+
         else:
-            return render(request, 'auth/login.html', {'error': 'Invalid username or password'})
+            return render(request, 'auth/login.html', {
+                'error': 'Invalid email or password'
+            })
+
     return render(request, 'auth/login.html')
+
 
 
 # Logout Page

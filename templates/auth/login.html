@@ -53,14 +53,33 @@
                         <!-- Login Form -->
                         <div id="loginSection">
                             <h3 class="text-center mb-4">Welcome Back</h3>
-                            <form id="loginForm">
+                            <form id="loginForm" method="POST" action="{% url 'login' %}">
+                                {% csrf_token %}
+
+                                {% if error %}
+                                    <div class="alert alert-danger">
+                                        {{ error }}
+                                    </div>
+                                {% endif %}
                                 <div class="mb-3">
                                     <label>Email</label>
-                                    <input type="email" class="form-control" placeholder="Enter your email" required>
+                                    <input 
+                                        type="email" 
+                                        name="username"
+                                        class="form-control"
+                                        placeholder="Enter your email"
+                                        required
+                                    >
                                 </div>
                                 <div class="mb-3">
                                     <label>Password</label>
-                                    <input type="password" class="form-control" placeholder="Enter your password" required>
+                                    <input 
+                                        type="password"
+                                        name="password"
+                                        class="form-control"
+                                        placeholder="Enter your password"
+                                        required
+                                    >
                                 </div>
                                 <button type="submit" class="btn w-100 py-2" style="background-color: #D4AF37; border: none; color: #000; font-weight: 600;">Sign In</button>
                                 <p class="text-center mt-3">Don't have an account? <a href="#" id="showRegister" style="color: #D4AF37; text-decoration: none;">Register here</a></p>
@@ -105,94 +124,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.min.js"></script>
-    {% block extra_js %}
-    <script>
-        new WOW().init();
-
-        // Get URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const returnUrl = urlParams.get('returnUrl');
-        const message = urlParams.get('message');
-        const activeTab = localStorage.getItem('activeTab') || urlParams.get('tab') || 'login';
-
-        // Display message if provided
-        if (message) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'alert alert-info alert-dismissible fade show';
-            messageDiv.innerHTML = `
-                <strong>Notice:</strong> ${decodeURIComponent(message)}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            `;
-            const authCard = document.querySelector('.auth-card');
-            if (authCard) {
-                authCard.insertBefore(messageDiv, authCard.firstChild);
-            }
-        }
-
-        // Set active tab based on localStorage or URL parameter
-        if (activeTab === 'register') {
-            document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('registerSection').style.display = 'block';
-            document.getElementById('btnLoginForm').classList.remove('active');
-            document.getElementById('btnRegisterForm').classList.add('active');
-        }
-
-        // Toggle between login and register forms
-        document.getElementById('showRegister').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('registerSection').style.display = 'block';
-            document.getElementById('btnLoginForm').classList.remove('active');
-            document.getElementById('btnRegisterForm').classList.add('active');
-        });
-
-        document.getElementById('showLogin').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('registerSection').style.display = 'none';
-            document.getElementById('loginSection').style.display = 'block';
-            document.getElementById('btnRegisterForm').classList.remove('active');
-            document.getElementById('btnLoginForm').classList.add('active');
-        });
-
-        // Button toggles
-        document.getElementById('btnLoginForm').addEventListener('click', function() {
-            document.getElementById('registerSection').style.display = 'none';
-            document.getElementById('loginSection').style.display = 'block';
-            this.classList.add('active');
-            document.getElementById('btnRegisterForm').classList.remove('active');
-        });
-
-        document.getElementById('btnRegisterForm').addEventListener('click', function() {
-            document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('registerSection').style.display = 'block';
-            this.classList.add('active');
-            document.getElementById('btnLoginForm').classList.remove('active');
-        });
-
-        // Registration form submission
-        document.getElementById("registerForm").onsubmit = function(e) {
-            e.preventDefault();
-            // Here you would typically save the registration data
-            // After successful registration, redirect based on returnUrl or default
-            const redirectUrl = returnUrl ? decodeURIComponent(returnUrl) : 'index.html';
-            localStorage.removeItem('activeTab');
-            window.location.href = redirectUrl;
-            return false;
-        };
-
-        // Login form submission
-        document.getElementById("loginForm").onsubmit = function(e) {
-            e.preventDefault();
-            // Here you would typically validate the login credentials
-            // After successful login, redirect based on returnUrl or default
-            const redirectUrl = returnUrl ? decodeURIComponent(returnUrl) : 'index.html';
-            localStorage.removeItem('activeTab');
-            window.location.href = redirectUrl;
-            return false;
-        };
-    </script>
-    {% endblock %}
-
 </body>
 
 </html>

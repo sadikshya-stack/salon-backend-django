@@ -22,9 +22,24 @@
                     <a href="{% url 'appointments' %}" class="nav-item d-flex align-items-center nav-link {% if request.resolver_match.url_name == 'appointment' %}active{% endif %}">Appointment</a>
                     <a href="{% url 'products' %}" class="nav-item d-flex align-items-center nav-link {% if request.resolver_match.url_name == 'products' %}active{% endif %}">Products</a>
                 </div>
+                {% if request.user.is_authenticated and request.user.role == 'customer' %}
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+                            <img src="https://ui-avatars.com/api/?name=John+Doe&background=d63384&color=fff" 
+                                class="rounded-circle me-2" width="32" height="32" alt="User">
+                            <span class="d-none d-lg-inline">{{ request.user.first_name|default:request.user.email }}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light mt-2">
+                            <a href="profile.html" class="dropdown-item"><i class="fas fa-user me-2"></i>Dashboard</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="{% url 'logout' %}" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
+                        </div>
+                    </div>
+                    {% else %}
                   <div class="d-flex">
                     <a href="{% url 'login' %}" class="btn me-2" style="background-color: #D4AF37; color: #000; font-weight: 600; border: none; padding: 0.5rem 1.5rem; border-radius: 50px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">Login</a>
                     <a href="{% url 'register' %}" class="btn" style="color: #D4AF37; border: 2px solid #D4AF37; font-weight: 600; padding: 0.5rem 1.5rem; border-radius: 50px;" onclick="localStorage.setItem('activeTab', 'register')">Register</a>
+                    {% endif %}
                 </div>
             </div>
         </nav>

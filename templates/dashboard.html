@@ -1,34 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Dashboard - Beauty Parlour Management System</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="" name="keywords">
-    <meta content="" name="description">
+{% extends 'base.html' %}
+{% load static %}
 
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
-
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Playfair+Display:wght@500&family=Work+Sans&display=swap" rel="stylesheet">
-
-    <!-- Icon Font Stylesheet -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom Styles -->
-    <link href="css/style.css" rel="stylesheet">
+{% block title %}Dashboard - Glamour Touch{% endblock %}
+   {% block extra_css %}
     <style>
         /* Custom Dashboard Styles */
         .dashboard-header {
@@ -147,48 +121,9 @@
             color: white;
         }
     </style>
-</head>
-<body>
-    <!-- Spinner -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
+    {% endblock %}
 
-    <!-- Top Navigation Bar -->
-    <div class="container-fluid bg-light sticky-top p-0">
-        <nav class="navbar navbar-expand-lg navbar-light p-0">
-            <a href="index.html" class="navbar-brand bg-primary py-4 px-5 me-0">
-                <h1 class="mb-0"><i class="bi bi-scissors"></i>Glamour Touch</h1>
-            </a>
-            <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse p-3" id="navbarCollapse">
-                <div class="navbar-nav mx-auto">
-                    <a href="dashboard.html" class="nav-item nav-link active">Dashboard</a>
-                    <a href="appointment.html" class="nav-item nav-link">Book Appointment</a>
-                    <a href="my-appointments.html" class="nav-item nav-link">My Appointments</a>
-                </div>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
-                        <img src="https://ui-avatars.com/api/?name=John+Doe&background=d63384&color=fff" 
-                             class="rounded-circle me-2" width="32" height="32" alt="User">
-                        <span class="d-none d-lg-inline">John Doe</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end bg-light mt-2">
-                        <a href="profile.html" class="dropdown-item"><i class="fas fa-user me-2"></i>View Profile</a>
-                        <a href="settings.html" class="dropdown-item"><i class="fas fa-cog me-2"></i>Settings</a>
-                        <a href="change-password.html" class="dropdown-item"><i class="fas fa-key me-2"></i>Change Password</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="login.html" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </div>
-
+    {% block content %}
     <!-- Dashboard Header -->
     <div class="dashboard-header">
         <div class="container">
@@ -391,68 +326,4 @@
             </div>
         </div>
     </div>
-
-    <!-- Footer -->
-    <div class="container-fluid footer position-relative bg-dark text-white-50 py-5">
-        <div class="container py-5">
-            <div class="row g-5">
-                <div class="col-lg-6 pe-lg-5">
-                    <a href="index.html" class="navbar-brand">
-                        <h1 class="font-dancing-script text-white">Glamour Touch</h1>
-                    </a>
-                    <p>Your trusted beauty and wellness partner, providing premium services to enhance your natural beauty and boost your confidence.</p>
-                    <p><i class="fa fa-phone-alt me-2"></i>+1 234 567 8900</p>
-                    <p><i class="fa fa-envelope me-2"></i>info@glamourtouch.com</p>
-                    <div class="d-flex mt-4">
-                        <a class="btn btn-lg-square btn-primary me-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a class="btn btn-lg-square btn-primary me-2" href="#"><i class="fab fa-instagram"></i></a>
-                        <a class="btn btn-lg-square btn-primary me-2" href="#"><i class="fab fa-twitter"></i></a>
-                        <a class="btn btn-lg-square btn-primary" href="#"><i class="fab fa-pinterest"></i></a>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <h5 class="text-white mb-4">Quick Links</h5>
-                            <a class="btn btn-link text-white-50" href="about.html">About Us</a>
-                            <a class="btn btn-link text-white-50" href="service.html">Our Services</a>
-                            <a class="btn btn-link text-white-50" href="appointment.html">Book Appointment</a>
-                            <a class="btn btn-link text-white-50" href="contact.html">Contact Us</a>
-                        </div>
-                        <div class="col-6">
-                            <h5 class="text-white mb-4">Support</h5>
-                            <a class="btn btn-link text-white-50" href="faq.html">FAQs</a>
-                            <a class="btn btn-link text-white-50" href="privacy.html">Privacy Policy</a>
-                            <a class="btn btn-link text-white-50" href="terms.html">Terms & Conditions</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid bg-dark text-white border-top border-secondary py-4">
-        <div class="container">
-            <div class="text-center">
-                <p class="mb-0">&copy; 2023 Glamour Touch. All Rights Reserved.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
-
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/counterup/counterup.min.js"></script>
-    <script src="lib/parallax/parallax.min.js"></script>
-    <script src="lib/lightbox/js/lightbox.min.js"></script>
-
-    <!-- Template Javascript -->
-    <script src="js/main.js"></script>
-</body>
-</html>
+{% endblock %}
