@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+{% if not request.user.is_authenticated %}
+    <script>
+        window.location.href = "{% url 'home' %}";
+    </script>
+{% endif %}
 
 {% block title %}Dashboard - Glamour Touch{% endblock %}
    {% block extra_css %}
@@ -129,7 +134,7 @@
         <div class="container">
             <div class="welcome-card">
                 <h1 class="font-dancing-script text-primary mb-2">Welcome Back,</h1>
-                <h2 class="mb-4">John Doe</h2>
+                <h2 class="mb-4">{{ request.user.get_full_name|title|default:request.user.email }}</h2>
                 <p class="mb-0">Here's what's happening with your beauty appointments today.</p>
             </div>
         </div>

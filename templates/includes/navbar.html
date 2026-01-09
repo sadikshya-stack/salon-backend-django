@@ -30,7 +30,7 @@
                             <span class="d-none d-lg-inline">{{ request.user.first_name|default:request.user.email }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light mt-2">
-                            <a href="profile.html" class="dropdown-item"><i class="fas fa-user me-2"></i>Dashboard</a>
+                            <a href="{% url 'dashboard' %}" class="dropdown-item"><i class="fas fa-user me-2"></i>Dashboard</a>
                             <div class="dropdown-divider"></div>
                             <a href="{% url 'logout' %}" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
                         </div>

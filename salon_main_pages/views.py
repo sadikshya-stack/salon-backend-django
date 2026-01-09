@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -99,7 +100,11 @@ def products(request):
 
 
 # Dashboard Page
+@login_required(login_url='login')
 def dashboard(request):
+    if request.user.role != 'customer':
+        raise Http404("Page not found")
+
     context = {
         "title": "Dashboard",
         "total_appointments": 25,
