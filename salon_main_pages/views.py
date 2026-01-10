@@ -4,6 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 User = get_user_model()
+from django.contrib import messages
+from booking.models import Appointment
+from datetime import time
 
 
 # Home Page
@@ -50,26 +53,102 @@ def services(request):
     return render(request, "services.html", context)
 
 
-# Appointments List Page
+# Appointments
+@login_required(login_url='login')
 def appointments(request):
-    context = {
-        "title": "Appointments",
-        "appointments": [
-            {
-                "customer": "Sita Sharma",
-                "service": "Facial",
-                "date": "2026-01-05",
-                "time": "11:00 AM"
-            },
-            {
-                "customer": "Rita Thapa",
-                "service": "Hair Cut",
-                "date": "2026-01-06",
-                "time": "2:00 PM"
-            },
-        ]
-    }
-    return render(request, "appointments.html", context)
+    if request.method == "POST":
+
+        user = request.user
+
+        # ----------------------------
+        # PHONE VALIDATION
+        # ----------------------------
+        phone = request.POST.get('phone', '').strip()
+
+        if not phone:
+            messages.error(request, "Phone number is required.")
+            return redirect('appointments')
+
+        if not phone.isdigit():
+            messages.error(request, "Phone number must contain only digits.")
+            return redirect('appointments')
+
+        if len(phone) != 10:
+            messages.error(request, "Phone number must be exactly 10 digits.")
+            return redirect('appointments')
+
+        # services selected (checkboxes)
+        services = request.POST.getlist('service')
+
+        if not services:
+            messages.error(request, "Please select at least one service.")
+            return redirect('appointments')
+
+        # we will save ONE appointment per submission
+        service = services[0]  # primary service
+
+        # ----------------------------
+        # DATE & TIME VALIDATION
+        # ----------------------------
+        appointment_date = request.POST.get('appointment_date')
+        appointment_time = request.POST.get('appointment_time')
+
+        if not appointment_date or not appointment_time:
+            messages.error(request, "Please select appointment date and time.")
+            return redirect('appointments')
+
+        # Convert string time → Python time object
+        hour, minute = map(int, appointment_time.split(":"))
+        selected_time = time(hour, minute)
+
+        # Allowed range
+        start_time = time(9, 0)   # 09:00 AM
+        end_time = time(18, 0)    # 06:00 PM
+
+        if not (start_time <= selected_time <= end_time):
+            messages.error(
+                request,
+                "Appointments are available only between 9:00 AM and 6:00 PM."
+            )
+            return redirect('appointments')
+
+        # ----------------------------
+        # CREATE APPOINTMENT
+        # ----------------------------
+
+        appointment = Appointment.objects.create(
+            name=user.get_full_name() or user.username,
+            email=user.email,
+            phone=request.POST.get('phone'),
+
+            service=service,
+
+            haircut_type=request.POST.get('haircut_type'),
+            manicure_type=request.POST.get('manicure_type'),
+            pedicure_type=request.POST.get('pedicure_type'),
+            makeup_type=request.POST.get('makeup_type'),
+            skincare_type=request.POST.get('skincare_type'),
+            nailextension_type=request.POST.get('nailextension_type'),
+
+            appointment_date=appointment_date,
+            appointment_time=selected_time,
+
+            payment_method=request.POST.get('payment_method'),
+
+            status='pending'  # explicit (even though default)
+        )
+
+        messages.success(
+            request,
+            "Your appointment has been booked successfully! "
+            "Our team will review your request and notify you via email based on available time slots. "
+            "You can also check your appointment status and details anytime from your account. "
+            "Thank you for choosing us!"
+        )
+        return redirect('appointments')
+
+    return render(request, 'appointments.html')
+
 
 
 # Appointments Create Page

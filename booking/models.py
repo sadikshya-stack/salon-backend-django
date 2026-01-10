@@ -65,7 +65,6 @@ class Staff(models.Model):
         return f"{self.user.first_name} {self.user.last_name} - {self.specialization or 'No Specialization'}" if self.user else "No User"
 
 
-from django.db import models
 
 class Appointment(models.Model):
 

@@ -33,23 +33,69 @@ class StaffAdmin(admin.ModelAdmin):
 # ---------- Appointment Admin ----------
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ('customer_name', 'service_name', 'staff_name', 'appointment_date', 'appointment_time', 'status')
-    list_filter = ('status', 'appointment_date', 'service')
-    search_fields = ('customer__first_name', 'customer__last_name', 'service__name', 'staff__user__first_name')
+    list_display = (
+        'customer_name',
+        'customer_email',
+        'service',
+        'appointment_date',
+        'appointment_time',
+        'status',
+        'payment_status',
+        'created_at',
+    )
 
+    list_filter = (
+        'status',
+        'payment_status',
+        'service',
+        'appointment_date',
+    )
+
+    search_fields = (
+        'name',
+        'email',
+        'phone',
+        'service',
+    )
+
+    ordering = ('-created_at',)
+
+    readonly_fields = ('created_at', 'updated_at')
+
+    fieldsets = (
+        ('Customer Info', {
+            'fields': ('name', 'email', 'phone', 'customer_type')
+        }),
+        ('Service Info', {
+            'fields': (
+                'service',
+                'haircut_type',
+                'manicure_type',
+                'pedicure_type',
+                'makeup_type',
+                'skincare_type',
+                'nailextension_type',
+            )
+        }),
+        ('Appointment', {
+            'fields': ('appointment_date', 'appointment_time')
+        }),
+        ('Payment & Status', {
+            'fields': ('payment_method', 'payment_status', 'status')
+        }),
+        ('System', {
+            'fields': ('created_at', 'updated_at')
+        }),
+    )
+
+    # -------- Custom columns --------
     def customer_name(self, obj):
-        return f"{obj.customer.first_name} {obj.customer.last_name}" if obj.customer else "No Customer"
-    customer_name.short_description = 'Customer'
+        return obj.name
+    customer_name.short_description = "Customer"
 
-    def service_name(self, obj):
-        return obj.service.name if obj.service else "No Service"
-    service_name.short_description = 'Service'
-
-    def staff_name(self, obj):
-        if obj.staff and obj.staff.user:
-            return f"{obj.staff.user.first_name} {obj.staff.user.last_name}"
-        return "No Staff"
-    staff_name.short_description = 'Staff'
+    def customer_email(self, obj):
+        return obj.email
+    customer_email.short_description = "Email"
 
 
 # ---------- Product Admin ----------
