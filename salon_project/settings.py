@@ -19,6 +19,24 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 CORS_ALLOWED_ORIGINS = []
 CORS_ALLOW_CREDENTIALS = False
 
+#Email Configuration
+
+#sbhf rjmw ddev lbmn
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'sadikshyasharma032@gmail.com'
+EMAIL_HOST_PASSWORD = 'sbhf rjmw ddev lbmn'
+
+DEFAULT_FROM_EMAIL = 'Glamour Touch <sadikshyasharma032@gmail.com>'
+
+
+
+
+
+
 # APPLICATIONS
 INSTALLED_APPS = [
     'django.contrib.admin',

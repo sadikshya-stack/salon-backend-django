@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.contrib import messages
 from booking.models import Appointment
-from datetime import time
+from datetime import datetime, time
 from booking.utils import process_appointment_slot
 
 
@@ -92,14 +92,15 @@ def appointments(request):
         # ----------------------------
         # DATE & TIME VALIDATION
         # ----------------------------
-        appointment_date = request.POST.get('appointment_date')
+        appointment_date_str = request.POST.get('appointment_date')
         appointment_time = request.POST.get('appointment_time')
 
-        if not appointment_date or not appointment_time:
+        if not appointment_date_str or not appointment_time:
             messages.error(request, "Please select appointment date and time.")
             return redirect('appointments')
 
         # Convert string time → Python time object
+        appointment_date = datetime.strptime(appointment_date_str, "%Y-%m-%d").date()
         hour, minute = map(int, appointment_time.split(":"))
         selected_time = time(hour, minute)
 

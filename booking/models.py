@@ -52,17 +52,22 @@ class Staff(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='staff_profile')
     specialization = models.CharField(max_length=200, blank=True, null=True)
     experience_years = models.IntegerField(default=0)
+
     is_available = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
+
     working_hours_start = models.TimeField(default='09:00')
     working_hours_end = models.TimeField(default='18:00')
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         db_table = 'staff'
-    
+
     def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name} - {self.specialization or 'No Specialization'}" if self.user else "No User"
+        return f"{self.user.first_name} {self.user.last_name}"
+
 
 
 

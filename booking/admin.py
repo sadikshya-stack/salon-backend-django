@@ -8,6 +8,48 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('email', 'first_name', 'last_name', 'role', 'is_active')
     list_filter = ('role', 'is_active')
     search_fields = ('email', 'first_name', 'last_name')
+    ordering = ('email',)
+
+    fieldsets = (
+        (None, {
+            'fields': ('email', 'password')
+        }),
+        ('Personal Info', {
+            'fields': ('first_name', 'last_name')
+        }),
+        ('Role & Permissions', {
+            'fields': (
+                'role',
+                'is_active',
+                'is_staff',
+                'is_superuser',
+                'groups',
+                'user_permissions',
+            )
+        }),
+        ('Important Dates', {
+            'fields': ('last_login',)
+        }),
+    )
+
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': (
+                'email',
+                'first_name',
+                'last_name',
+                'role',
+                'password1',
+                'password2',
+                'is_active',
+                'is_staff',
+            ),
+        }),
+    )
+
+    readonly_fields = ('last_login',)
+
 
 
 # ---------- Service Admin ----------
