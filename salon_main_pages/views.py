@@ -7,6 +7,8 @@ User = get_user_model()
 from django.contrib import messages
 from booking.models import Appointment
 from datetime import time
+from booking.utils import process_appointment_slot
+
 
 
 # Home Page
@@ -138,13 +140,25 @@ def appointments(request):
             status='pending'  # explicit (even though default)
         )
 
-        messages.success(
-            request,
-            "Your appointment has been booked successfully! "
-            "Our team will review your request and notify you via email based on available time slots. "
-            "You can also check your appointment status and details anytime from your account. "
-            "Thank you for choosing us!"
-        )
+        # AUTO SLOT CHECK + EMAIL
+        slot_confirmed = process_appointment_slot(appointment)
+
+        if slot_confirmed:
+            messages.success(
+                request,
+                "Your appointment has been booked and confirmed! "
+                "Please check your email for schedule details. "
+                "You can also check your appointment status and details anytime from your account. "
+                "Kindly arrive 30 minutes before your appointment time."
+                "Thank you for choosing us!"
+            )
+        else:
+            messages.error(
+                request,
+                "The selected time slot is not available. "
+                "Please check your email and book another appointment."
+            )
+
         return redirect('appointments')
 
     return render(request, 'appointments.html')
