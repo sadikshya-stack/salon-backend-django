@@ -8,7 +8,8 @@ from django.contrib import messages
 from booking.models import Appointment
 from datetime import datetime, time
 from booking.utils import process_appointment_slot
-
+from django.http import Http404
+from django.utils import timezone
 
 
 # Home Page
@@ -58,6 +59,10 @@ def services(request):
 # Appointments
 @login_required(login_url='login')
 def appointments(request):
+    if request.user.role != 'customer':
+        messages.error(request, "You are not authorized to access this page.")
+        return redirect('login')  # or redirect('home')
+
     if request.method == "POST":
 
         user = request.user
@@ -193,19 +198,65 @@ def products(request):
     return render(request, "products.html", context)
 
 
-# Dashboard Page
+
 @login_required(login_url='login')
-def dashboard(request):
+def appointment_history(request):
+    # Only customers allowed
     if request.user.role != 'customer':
         raise Http404("Page not found")
 
+    user_email = request.user.email
+    today = timezone.now().date()
+
+    appointments = Appointment.objects.filter(
+        email=user_email
+    ).order_by('-appointment_date', '-appointment_time')
+
     context = {
-        "title": "Dashboard",
-        "total_appointments": 25,
-        "total_customers": 120,
-        "total_services": 8,
+        "appointments": appointments,
+        "page_title": "Appointment History",
     }
+
+    return render(request, "appointment_history.html", context)
+
+
+
+# Dashboard Page
+@login_required(login_url='login')
+def dashboard(request):
+    # Only customers allowed
+    if request.user.role != 'customer':
+        raise Http404("Page not found")
+
+    user_email = request.user.email
+    today = timezone.now().date()
+
+    # All appointments of this customer
+    appointments = Appointment.objects.filter(email=user_email)
+
+    # Stats
+    total_appointments = appointments.count()
+    upcoming_appointments = appointments.filter(
+        appointment_date__gte=today,
+        status__in=['pending', 'confirmed']
+    )
+
+    completed_appointments = appointments.filter(status='completed').count()
+    cancelled_appointments = appointments.filter(status='cancelled').count()
+
+    services_booked = appointments.values('service').distinct().count()
+
+    context = {
+        "appointments": upcoming_appointments.order_by('appointment_date', 'appointment_time')[:5],
+        "total_appointments": total_appointments,
+        "upcoming_count": upcoming_appointments.count(),
+        "completed_count": completed_appointments,
+        "cancelled_count": cancelled_appointments,
+        "services_booked": services_booked,
+    }
+
     return render(request, "dashboard.html", context)
+
 
 
 

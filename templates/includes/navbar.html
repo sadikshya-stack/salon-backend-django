@@ -25,8 +25,13 @@
                 {% if request.user.is_authenticated and request.user.role == 'customer' %}
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
-                            <img src="https://ui-avatars.com/api/?name=John+Doe&background=d63384&color=fff" 
-                                class="rounded-circle me-2" width="32" height="32" alt="User">
+                            <img
+                                src="https://ui-avatars.com/api/?name={{ request.user.first_name|default:request.user.email }}&background=d63384&color=fff"
+                                class="rounded-circle me-2"
+                                width="32"
+                                height="32"
+                                alt="User Avatar"
+                            >
                             <span class="d-none d-lg-inline">{{ request.user.first_name|default:request.user.email }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light mt-2">

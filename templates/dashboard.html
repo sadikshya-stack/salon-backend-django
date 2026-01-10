@@ -146,28 +146,28 @@
             <div class="col-md-6 col-lg-3">
                 <div class="stat-card">
                     <i class="fas fa-calendar-check"></i>
-                    <h3 class="mb-1">3</h3>
+                    <h3 class="mb-1">{{ upcoming_count }}</h3>
                     <p class="mb-0 text-muted">Upcoming Appointments</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="stat-card" style="border-color: #20c997;">
                     <i class="fas fa-check-circle" style="color: #20c997;"></i>
-                    <h3 class="mb-1">12</h3>
+                    <h3 class="mb-1">{{ completed_count }}</h3>
                     <p class="mb-0 text-muted">Completed Appointments</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="stat-card" style="border-color: #ffc107;">
                     <i class="fas fa-clock" style="color: #ffc107;"></i>
-                    <h3 class="mb-1">2</h3>
-                    <p class="mb-0 text-muted">Pending Requests</p>
+                    <h3 class="mb-1">{{ cancelled_count }}</h3>
+                    <p class="mb-0 text-muted">Cancelled Appointment</p>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3">
                 <div class="stat-card" style="border-color: #6f42c1;">
                     <i class="fas fa-spa" style="color: #6f42c1;"></i>
-                    <h3 class="mb-1">8</h3>
+                    <h3 class="mb-1">{{ services_booked }}</h3>
                     <p class="mb-0 text-muted">Services Booked</p>
                 </div>
             </div>
@@ -181,89 +181,14 @@
         </div>
         <div class="row g-3">
             <div class="col-md-4">
-                <a href="appointment.html" class="btn btn-pink w-100 py-3">
+                <a href="{% url 'appointments' %}" class="btn btn-pink w-100 py-3">
                     <i class="fas fa-plus-circle me-2"></i>Book New Appointment
                 </a>
             </div>
             <div class="col-md-4">
-                <a href="my-appointments.html" class="btn btn-outline-pink w-100 py-3">
+                <a href="{% url 'appointment_history' %}" class="btn btn-outline-pink w-100 py-3">
                     <i class="fas fa-history me-2"></i>View Appointment History
                 </a>
-            </div>
-            <div class="col-md-4">
-                <a href="profile.html" class="btn btn-outline-pink w-100 py-3">
-                    <i class="fas fa-user-edit me-2"></i>Edit Profile
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Services Section -->
-    <div class="container py-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="mb-0">Popular Services</h3>
-            <a href="service.html" class="btn btn-link text-decoration-none">View All <i class="fas fa-arrow-right ms-1"></i></a>
-        </div>
-        <div class="row g-4">
-            <div class="col-md-6 col-lg-3">
-                <div class="service-card">
-                    <img src={% static 'img/haircut.png' %} alt="Haircut">
-                    <div class="p-4">
-                        <h5>Haircut & Styling</h5>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div>
-                                <span class="text-muted"><i class="far fa-clock me-1"></i> 45 min</span>
-                                <h5 class="text-primary mt-1 mb-0">$35</h5>
-                            </div>
-                            <a href="appointment.html" class="btn btn-sm btn-pink">Book Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="service-card">
-                    <img src={% static 'img/facial.png' %} alt="Facial">
-                    <div class="p-4">
-                        <h5>Facial Treatment</h5>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div>
-                                <span class="text-muted"><i class="far fa-clock me-1"></i> 60 min</span>
-                                <h5 class="text-primary mt-1 mb-0">$65</h5>
-                            </div>
-                            <a href="appointment.html" class="btn btn-sm btn-pink">Book Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="service-card">
-                    <img src={% static 'img/manicure.png' %} alt="Manicure">
-                    <div class="p-4">
-                        <h5>Manicure & Pedicure</h5>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div>
-                                <span class="text-muted"><i class="far fa-clock me-1"></i> 75 min</span>
-                                <h5 class="text-primary mt-1 mb-0">$55</h5>
-                            </div>
-                            <a href="appointment.html" class="btn btn-sm btn-pink">Book Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3">
-                <div class="service-card">
-                    <img src={% static 'img/makeup.png' %} alt="Makeup">
-                    <div class="p-4">
-                        <h5>Bridal Makeup</h5>
-                        <div class="d-flex justify-content-between align-items-center mt-3">
-                            <div>
-                                <span class="text-muted"><i class="far fa-clock me-1"></i> 120 min</span>
-                                <h5 class="text-primary mt-1 mb-0">$120</h5>
-                            </div>
-                            <a href="appointment.html" class="btn btn-sm btn-pink">Book Now</a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -272,7 +197,6 @@
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="mb-0">Upcoming Appointments</h3>
-            <a href="my-appointments.html" class="btn btn-link text-decoration-none">View All <i class="fas fa-arrow-right ms-1"></i></a>
         </div>
         <div class="appointment-table">
             <div class="table-responsive">
@@ -281,52 +205,62 @@
                         <tr>
                             <th>Date & Time</th>
                             <th>Service</th>
-                            <th>Staff</th>
+                            <th>Types</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                    {% if appointments %}
+                        {% for appt in appointments %}
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">{{ appt.appointment_date|date:"M d, Y" }}</div>
+                                    <div class="text-muted">
+                                        {{ appt.appointment_time|time:"h:i A" }}
+                                    </div>
+                                </td>
+
+                                <td>{{ appt.get_service_display }}</td>
+
+                                <td class="text-muted small">
+                                    {% with "" as sep %}
+                                        {% if appt.haircut_type %}{{ sep }}{{ appt.haircut_type }}{% with ", " as sep %}{% endwith %}{% endif %}
+                                        {% if appt.manicure_type %}{{ sep }}{{ appt.manicure_type }}{% with ", " as sep %}{% endwith %}{% endif %}
+                                        {% if appt.pedicure_type %}{{ sep }}{{ appt.pedicure_type }}{% with ", " as sep %}{% endwith %}{% endif %}
+                                        {% if appt.makeup_type %}{{ sep }}{{ appt.makeup_type }}{% with ", " as sep %}{% endwith %}{% endif %}
+                                        {% if appt.skincare_type %}{{ sep }}{{ appt.skincare_type }}{% with ", " as sep %}{% endwith %}{% endif %}
+                                        {% if appt.nailextension_type %}{{ sep }}{{ appt.nailextension_type }}{% endif %}
+                                    {% endwith %}
+                                </td>
+
                             <td>
-                                <div class="fw-bold">Jun 25, 2023</div>
-                                <div class="text-muted">10:00 AM - 11:00 AM</div>
+                                {% if appt.status == 'confirmed' %}
+                                    <span class="status-confirmed">Confirmed</span>
+                                {% elif appt.status == 'pending' %}
+                                    <span class="status-pending">Pending</span>
+                                {% elif appt.status == 'completed' %}
+                                    <span class="status-completed">Completed</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Cancelled</span>
+                                {% endif %}
                             </td>
-                            <td>Haircut & Styling</td>
-                            <td>Sarah Johnson</td>
-                            <td><span class="status-confirmed">Confirmed</span></td>
+
                             <td>
-                                <button class="btn btn-sm btn-outline-secondary">Reschedule</button>
-                                <button class="btn btn-sm btn-outline-danger">Cancel</button>
+                              
+                                <span class="text-muted">—</span>
+
                             </td>
                         </tr>
-                        <tr>
-                            <td>
-                                <div class="fw-bold">Jun 28, 2023</div>
-                                <div class="text-muted">2:30 PM - 3:30 PM</div>
-                            </td>
-                            <td>Facial Treatment</td>
-                            <td>Emily Davis</td>
-                            <td><span class="status-pending">Pending</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-secondary">Reschedule</button>
-                                <button class="btn btn-sm btn-outline-danger">Cancel</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="fw-bold">Jul 2, 2023</div>
-                                <div class="text-muted">11:00 AM - 12:30 PM</div>
-                            </td>
-                            <td>Manicure & Pedicure</td>
-                            <td>Jessica Wilson</td>
-                            <td><span class="status-confirmed">Confirmed</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-secondary">Reschedule</button>
-                                <button class="btn btn-sm btn-outline-danger">Cancel</button>
-                            </td>
-                        </tr>
-                    </tbody>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">
+                            No upcoming appointments found.
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
                 </table>
             </div>
         </div>
