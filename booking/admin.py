@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Service, Staff, Appointment, Product, Order, OrderItem, AvailableSlot
+from .models import User, Service, ServiceType, Staff, Appointment, Product, Order, OrderItem, AvailableSlot, Contact
 
 # ---------- User Admin ----------
 @admin.register(User)
@@ -53,11 +53,32 @@ class UserAdmin(BaseUserAdmin):
 
 
 # ---------- Service Admin ----------
+class ServiceTypeInline(admin.TabularInline):
+    model = ServiceType
+    extra = 1
+    fields = ('name', 'price', 'duration_minutes', 'is_active')
+
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'duration_minutes', 'category', 'is_active')
-    list_filter = ('category', 'is_active')
+    list_display = ('name', 'is_active', 'created_at')
+    list_filter = ('is_active',)
     search_fields = ('name', 'description')
+    ordering = ('name',)
+    list_editable = ('is_active',)
+
+    inlines = [ServiceTypeInline]
+
+    fieldsets = (
+            ("Service Information", {
+                "fields": ('name', 'description', 'is_active')
+            }),
+            ("Timestamps", {
+                "fields": ('created_at', 'updated_at'),
+                "classes": ('collapse',),
+            }),
+        )
+
+    readonly_fields = ('created_at', 'updated_at')
 
 
 # ---------- Staff Admin ----------
@@ -188,3 +209,7 @@ class AvailableSlotAdmin(admin.ModelAdmin):
         return "No Staff"
     staff_name.short_description = 'Staff'
 
+
+
+admin.site.register(Contact)
+admin.site.register(ServiceType)

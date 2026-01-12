@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.contrib import messages
-from booking.models import Appointment
+from booking.models import Appointment, Contact
 from datetime import datetime, time
 from booking.utils import process_appointment_slot
 from django.http import Http404
@@ -176,15 +176,28 @@ def appointments_create(request):
     return HttpResponse("Appointment create page working")
 
 
-# Contact Page
+
 def contact(request):
-    context = {
-        "title": "Contact Us",
-        "address": "Kathmandu, Nepal",
-        "phone": "+977-98XXXXXXXX",
-        "email": "info@beautyparlour.com"
-    }
-    return render(request, "contact.html", context)
+    context = {}
+
+    if request.method == "POST":
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
+        message = request.POST.get('message')
+
+        # Save to database
+        Contact.objects.create(
+            name=name,
+            email=email,
+            subject=subject,
+            message=message
+        )
+
+        context["success"] = True
+
+    return render(request, 'contact.html', context)
+
 
 
 # Products Page
@@ -294,9 +307,6 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
-
-
-
 
 
 def register_view(request):

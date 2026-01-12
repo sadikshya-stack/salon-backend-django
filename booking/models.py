@@ -28,23 +28,45 @@ class User(AbstractUser):
         return f"{self.first_name} {self.last_name}" if self.first_name or self.last_name else self.email
 
 
-# ---------- Service ----------
+
+
 class Service(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    duration_minutes = models.IntegerField()
-    category = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         db_table = 'services'
-    
+
     def __str__(self):
-        return self.name or "No Name"
+        return self.name
+
+
+
+
+class ServiceType(models.Model):
+    service = models.ForeignKey(
+        Service,
+        on_delete=models.CASCADE,
+        related_name='types'
+    )
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    duration_minutes = models.IntegerField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'service_types'
+
+    def __str__(self):
+        return f"{self.service.name} - {self.name}"
+
+
 
 
 # ---------- Staff ----------
@@ -268,3 +290,17 @@ class AvailableSlot(models.Model):
     def __str__(self):
         staff_name = f"{self.staff.user.first_name} {self.staff.user.last_name}" if self.staff and self.staff.user else "No Staff"
         return f"{staff_name} - {self.date} {self.start_time}"
+
+
+
+
+
+class Contact(models.Model):
+    name = models.CharField(max_length=20)
+    email = models.EmailField()
+    subject = models.CharField(max_length=350)
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.subject}"

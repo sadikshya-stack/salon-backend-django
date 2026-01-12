@@ -27,10 +27,10 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = 'sadikshyasharma032@gmail.com'
-EMAIL_HOST_PASSWORD = 'sbhf rjmw ddev lbmn'
+EMAIL_HOST_USER = 'glamourtouch58@gmail.com'
+EMAIL_HOST_PASSWORD = 'uzrh yyzf ujck ynig'
 
-DEFAULT_FROM_EMAIL = 'Glamour Touch <sadikshyasharma032@gmail.com>'
+DEFAULT_FROM_EMAIL = 'Glamour Touch <glamourtouch58@gmail.com>'
 
 
 
