@@ -207,7 +207,8 @@
                             <th>Service</th>
                             <th>Types</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th>Staff</th>
+                            <th>Payment Method</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -221,17 +222,25 @@
                                     </div>
                                 </td>
 
-                                <td>{{ appt.get_service_display }}</td>
+                               <td>
+                                    {% for type in appt.services.all %}
+                                        <span class="badge bg-light text-dark mb-1 d-inline-block">
+                                            {{ type.service.name }}
+                                        </span>
+                                    {% empty %}
+                                        <span class="text-muted">—</span>
+                                    {% endfor %}
+                                </td>
 
+                                <!-- SERVICE TYPES -->
                                 <td class="text-muted small">
-                                    {% with "" as sep %}
-                                        {% if appt.haircut_type %}{{ sep }}{{ appt.haircut_type }}{% with ", " as sep %}{% endwith %}{% endif %}
-                                        {% if appt.manicure_type %}{{ sep }}{{ appt.manicure_type }}{% with ", " as sep %}{% endwith %}{% endif %}
-                                        {% if appt.pedicure_type %}{{ sep }}{{ appt.pedicure_type }}{% with ", " as sep %}{% endwith %}{% endif %}
-                                        {% if appt.makeup_type %}{{ sep }}{{ appt.makeup_type }}{% with ", " as sep %}{% endwith %}{% endif %}
-                                        {% if appt.skincare_type %}{{ sep }}{{ appt.skincare_type }}{% with ", " as sep %}{% endwith %}{% endif %}
-                                        {% if appt.nailextension_type %}{{ sep }}{{ appt.nailextension_type }}{% endif %}
-                                    {% endwith %}
+                                    {% for type in appt.services.all %}
+                                        <div>
+                                            {{ type.name }} — Rs {{ type.price }}
+                                        </div>
+                                    {% empty %}
+                                        —
+                                    {% endfor %}
                                 </td>
 
                             <td>
@@ -247,9 +256,15 @@
                             </td>
 
                             <td>
-                              
-                                <span class="text-muted">—</span>
+                                 {% if appt.staff %}
+                                    {{ appt.staff.user.get_full_name }}
+                                {% else %}
+                                    Not assigned yet
+                                {% endif %}
+                            </td>
 
+                            <td>
+                                {{ appt.payment_method.name }}
                             </td>
                         </tr>
                     {% endfor %}

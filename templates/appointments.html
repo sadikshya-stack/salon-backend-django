@@ -179,177 +179,42 @@ button:hover {
               {% endfor %}
             {% endif %}
 
+            {% if services %}
             <h3>Select Services</h3>
+            {% endif %}
 
             <div class="services">
+                {% for service in services %}
+                    <label class="service-card" data-service="{{ service.id }}">
+                        <input type="checkbox"
+                            name="services"
+                            value="{{ service.id }}">
 
-                <label class="service-card" data-service="haircut">
-                    <input type="checkbox" name="service" value="haircut">
-                    <div class="service-icon">✂️</div>
-                    Haircut
-                </label>
-
-                <label class="service-card" data-service="manicure">
-                    <input type="checkbox" name="service" value="manicure">
-                    <div class="service-icon">💅</div>
-                    Manicure
-                </label>
-
-                <label class="service-card" data-service="pedicure">
-                    <input type="checkbox" name="service" value="pedicure">
-                    <div class="service-icon">🦶</div>
-                    Pedicure
-                </label>
-
-                <label class="service-card" data-service="makeup">
-                    <input type="checkbox" name="service" value="makeup">
-                    <div class="service-icon">💄</div>
-                    Makeup
-                </label>
-
-                <label class="service-card" data-service="skincare">
-                    <input type="checkbox" name="service" value="skincare">
-                    <div class="service-icon">🧴</div>
-                    Skincare
-                </label>
-
-                <label class="service-card" data-service="nailextension">
-                    <input type="checkbox" name="service" value="nailextension">
-                    <div class="service-icon">💅</div>
-                    Nail Extension
-                </label>
-
+                        <div class="service-icon"><img src="{{ service.image.url }}" alt="{{ service.name }}"></div>
+                        {{ service.name }}
+                    </label>
+                {% endfor %}
             </div>
 
-            <!-- SERVICE TYPES -->
+            {% for service in services %}
+            <div id="serviceBox{{ service.id }}" class="service-box">
+                <strong>{{ service.name }} Types</strong>
 
-            <div id="haircutBox" class="service-box">
-              <strong>Haircut Type</strong>
-
-              <label class="radio-row">
-                  <input type="radio" name="haircut_type" value="Straight Cut">
-                  <span>Straight Cut</span>
-              </label>
-
-              <label class="radio-row">
-                  <input type="radio" name="haircut_type" value="U-Cut">
-                  <span>U-Cut</span>
-              </label>
-
-               <label class="radio-row">
-                  <input type="radio" name="haircut_type" value="V-Cut">
-                  <span>V-Cut</span>
-              </label>
-
-               <label class="radio-row">
-                  <input type="radio" name="haircut_type" value="Long Layers">
-                  <span>Long Layers</span>
-              </label>
-
-              <label class="radio-row">
-                  <input type="radio" name="haircut_type" value="Butterfly Cut">
-                  <span>Butterfly Cut</span>
-              </label>
-
-              <label class="radio-row">
-                  <input type="radio" name="haircut_type" value="Wolf Cut">
-                  <span>Wolf Cut</span>
-              </label>
-
-              <label class="radio-row">
-                  <input type="radio" name="haircut_type" value="Bob Cut">
-                  <span>Bob Cut</span>
-              </label>
-          </div>
-
-
-            <div id="manicureBox" class="service-box">
-                <strong>Manicure Type</strong>
-
-                <label class="radio-row">
-                    <input type="radio" name="manicure_type" value="Basic">
-                     <span>Basic</span>
-                </label>
-                
-                <label class="radio-row">
-                    <input type="radio" name="manicure_type" value="Gel"> 
-                    <span>Gel</span>
-                </label>
-
-                <label class="radio-row">
-                    <input type="radio" name="manicure_type" value="Spa">
-                     <span>Spa</span>
-                </label>
+                {% for type in service.types.all %}
+                    <label class="radio-row">
+                        <input type="radio"
+                            name="service_type_{{ service.id }}"
+                            value="{{ type.id }}">
+                        <span>
+                            {{ type.name }} —
+                            Rs {{ type.price }}
+                            {% comment %} {{ type.duration_minutes }} mins {% endcomment %}
+                        </span>
+                    </label>
+                {% endfor %}
             </div>
+            {% endfor %}
 
-            <div id="pedicureBox" class="service-box">
-                <strong>Pedicure Type</strong>
-
-                <label class="radio-row">
-                    <input type="radio" name="pedicure_type" value="Basic"> 
-                    <span>Basic</span>
-                </label>
-                 <label class="radio-row">
-                    <input type="radio" name="pedicure_type" value="Gel">
-                    <span>Gel</span>
-                </label>
-                 <label class="radio-row">
-                    <input type="radio" name="pedicure_type" value="Spa"> 
-                    <span>Spa</span>
-                </label>
-            </div>
-
-            <div id="makeupBox" class="service-box">
-                <strong>Makeup Type</strong>
-
-                 <label class="radio-row">
-                    <input type="radio" name="makeup_type" value="Bridal">
-                    <span>Bridal</span>
-                </label>
-                 <label class="radio-row">
-                    <input type="radio" name="makeup_type" value="Party">
-                    <span>Party</span>
-                </label>
-                 <label class="radio-row">
-                    <input type="radio" name="makeup_type" value="Casual">
-                    <span>Casual</span>
-                </label>
-                 <label class="radio-row">
-                    <input type="radio" name="makeup_type" value="Glam">
-                    <span>Glam</span>
-                </label>
-            </div>
-
-            <div id="skincareBox" class="service-box">
-                <strong>Skincare Type</strong>
-
-                <label class="radio-row">
-                    <input type="radio" name="skincare_type" value="Basic">
-                    <span>Basic</span>
-                </label>
-
-                <label class="radio-row">
-                    <input type="radio" name="skincare_type" value="Acne Care">
-                    <span>Acne Care</span>
-                </label>
-                 <label class="radio-row">
-                    <input type="radio" name="skincare_type" value="Facial Treatment">
-                    <span>Facial Treatment</span>
-                </label>
-            </div>
-
-            <div id="nailextensionBox" class="service-box">
-                <strong>Nail Extension Type</strong>
-
-                 <label class="radio-row">
-                    <input type="radio" name="nailextension_type" value="Gel">
-                    <span>Gel</span>
-                </label>
-                 <label class="radio-row">
-                    <input type="radio" name="nailextension_type" value="Acrylic">
-                    <span>Acrylic</span>
-                </label>
-            </div>
 
             <input type="tel" name="phone" id="phone" placeholder="Phone Number" style="margin-top: 18px;" required>
             <small id="phoneError" style="color: red; display: none;">
@@ -360,12 +225,16 @@ button:hover {
 
             <input type="time" name="appointment_time" id="time" required min="09:00" max="18:00">
 
-            <select name="payment_method" id="payment" required>
+
+            <select name="payment_method" required>
                 <option value="">Select Payment Method</option>
-                <option value="cash">Cash</option>
-                <option value="card">Card</option>
-                <option value="digital">Esewa / Khalti</option>
+                {% for method in payment_methods %}
+                    <option value="{{ method.id }}">
+                        {{ method.name }}
+                    </option>
+                {% endfor %}
             </select>
+
 
             <div style="background:#fff8e6; border:1px solid #D4AF37; padding:14px; border-radius:10px; margin:20px 0;">
                 <strong>Important Information:</strong>
@@ -399,19 +268,34 @@ button:hover {
 
 
 
-document.querySelectorAll('.service-card').forEach(card => {
-    const checkbox = card.querySelector('input');
-    const service = card.dataset.service;
-    const box = document.getElementById(service + 'Box');
 
-    checkbox.addEventListener('change', () => {
-        card.classList.toggle('active', checkbox.checked);
 
-        if (box) {
-            box.style.display = checkbox.checked ? 'block' : 'none';
-        }
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Toggle service box ONLY via checkbox
+    document.querySelectorAll('.service-card input[type="checkbox"]').forEach(checkbox => {
+        const card = checkbox.closest('.service-card');
+        const serviceId = card.dataset.service;
+        const box = document.getElementById('serviceBox' + serviceId);
+
+        checkbox.addEventListener('change', function () {
+            card.classList.toggle('active', checkbox.checked);
+            if (box) {
+                box.style.display = checkbox.checked ? 'block' : 'none';
+            }
+        });
     });
+
+    // 🚨 CRITICAL FIX: prevent radio clicks from affecting service checkbox
+    document.querySelectorAll('.radio-row input[type="radio"]').forEach(radio => {
+        radio.addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+    });
+
 });
+
+
 
 
 /* -------------------------
@@ -449,51 +333,8 @@ form.addEventListener('submit', function (e) {
     phoneInput.style.marginBottom = "18px";
     phoneError.style.marginBottom = "0px";
 
-
-
-    /* ---------- SERVICE CHECKBOX VALIDATION ---------- */
-    const serviceCards = document.querySelectorAll('.service-card input[type="checkbox"]');
-    let anyServiceChecked = false;
-
-    serviceCards.forEach(cb => {
-        if (cb.checked) anyServiceChecked = true;
-    });
-
-    if (!anyServiceChecked) {
-        alert("Please select at least one service.");
-        e.preventDefault();
-        return;
-    }
-
-    /* ---------- SERVICE TYPE VALIDATION ---------- */
-    const serviceTypeMap = {
-        haircut: 'haircut_type',
-        manicure: 'manicure_type',
-        pedicure: 'pedicure_type',
-        makeup: 'makeup_type',
-        skincare: 'skincare_type',
-        nailextension: 'nailextension_type'
-    };
-
-    for (const service in serviceTypeMap) {
-        const checkbox = document.querySelector(`input[value="${service}"]`);
-        if (checkbox && checkbox.checked) {
-
-            const radios = document.getElementsByName(serviceTypeMap[service]);
-            let typeSelected = false;
-
-            radios.forEach(radio => {
-                if (radio.checked) typeSelected = true;
-            });
-
-            if (!typeSelected) {
-                alert(`Please select a type for ${service.charAt(0).toUpperCase() + service.slice(1)}.`);
-                e.preventDefault();
-                return;
-            }
-        }
-    }
-
 });
+
+
 </script>
 {% endblock %}

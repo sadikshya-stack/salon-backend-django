@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Service, ServiceType, Staff, Appointment, Product, Order, OrderItem, AvailableSlot, Contact
+from .models import User, Service, ServiceType, Staff, Appointment, Product, Order, OrderItem, AvailableSlot, Contact, PaymentMethod
+from django.utils.html import format_html
+
 
 # ---------- User Admin ----------
 @admin.register(User)
@@ -60,7 +62,7 @@ class ServiceTypeInline(admin.TabularInline):
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'is_active', 'created_at')
+    list_display = ('name', 'is_active', 'created_at', 'image_preview')
     list_filter = ('is_active',)
     search_fields = ('name', 'description')
     ordering = ('name',)
@@ -70,7 +72,7 @@ class ServiceAdmin(admin.ModelAdmin):
 
     fieldsets = (
             ("Service Information", {
-                "fields": ('name', 'description', 'is_active')
+                "fields": ('name', 'description', 'is_active', 'image', 'image_preview')
             }),
             ("Timestamps", {
                 "fields": ('created_at', 'updated_at'),
@@ -78,7 +80,17 @@ class ServiceAdmin(admin.ModelAdmin):
             }),
         )
 
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at', 'image_preview')
+
+    def image_preview(self, obj):
+            if obj.image:
+                return format_html(
+                    '<img src="{}" width="80" height="80" style="object-fit:cover;border-radius:8px;" />',
+                    obj.image.url
+                )
+            return "No Image"
+
+    image_preview.short_description = "Preview"
 
 
 # ---------- Staff Admin ----------
@@ -199,3 +211,4 @@ class AvailableSlotAdmin(admin.ModelAdmin):
 
 admin.site.register(Contact)
 admin.site.register(ServiceType)
+admin.site.register(PaymentMethod)

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
+from django.core.validators import FileExtensionValidator
 
 # ---------- User ----------
 class User(AbstractUser):
@@ -31,10 +32,19 @@ class User(AbstractUser):
 
 
 class Service(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
+
+    image = models.ImageField(
+        upload_to='services/',
+        validators=[FileExtensionValidator(['jpg','jpeg','png','webp'])],
+        blank=True,
+        null=True,
+        help_text="Upload service image (jpg, png, webp)"
+    )
+
     is_active = models.BooleanField(default=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -43,6 +53,7 @@ class Service(models.Model):
 
     def __str__(self):
         return self.name
+
 
 
 

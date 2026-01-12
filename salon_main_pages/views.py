@@ -5,8 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from django.contrib import messages
-from booking.models import Appointment, Contact
-from datetime import datetime, time
+from booking.models import Appointment, Contact, Service, PaymentMethod, ServiceType
+from datetime import datetime, time, timedelta
 from booking.utils import process_appointment_slot
 from django.http import Http404
 from django.utils import timezone
@@ -67,7 +67,7 @@ def appointments(request):
     # DATA FOR TEMPLATE (GET)
     # ----------------------------
     services = Service.objects.filter(is_active=True).prefetch_related('types')
-    payment_methods = PaymentMethod.objects.filter(is_active=True)
+    payment_methods = PaymentMethod.objects.filter(is_active=True).all()
 
     context = {
         'services': services,
@@ -93,19 +93,28 @@ def appointments(request):
         # ----------------------------
         # SERVICE TYPE VALIDATION
         # ----------------------------
-        service_type_id = request.POST.get('service_type')
+        selected_service_type_ids = []
 
-        if not service_type_id:
-            messages.error(request, "Please select a service type.")
+        for service in Service.objects.filter(is_active=True):
+            key = f"service_type_{service.id}"
+            service_type_id = request.POST.get(key)
+
+            if service_type_id:
+                selected_service_type_ids.append(service_type_id)
+
+
+        if not selected_service_type_ids:
+            messages.error(request, "Please select at least one service type.")
             return redirect('appointments')
 
-        try:
-            service_type = ServiceType.objects.select_related('service').get(
-                id=service_type_id,
-                is_active=True
-            )
-        except ServiceType.DoesNotExist:
-            messages.error(request, "Invalid service selection.")
+
+        service_types = ServiceType.objects.filter(
+            id__in=selected_service_type_ids,
+            is_active=True
+        )
+
+        if service_types.count() != len(selected_service_type_ids):
+            messages.error(request, "Invalid service type selection.")
             return redirect('appointments')
 
         # ----------------------------
@@ -185,7 +194,7 @@ def appointments(request):
         )
 
         # link selected service type
-        appointment.services.add(service_type)
+        appointment.services.add(*service_types)
 
         # AUTO SLOT CHECK + EMAIL
         slot_confirmed = process_appointment_slot(appointment)
@@ -208,13 +217,9 @@ def appointments(request):
 
         return redirect('appointments')
 
-    return render(request, 'appointments.html')
+    return render(request, 'appointments.html', context)
 
 
-
-# Appointments Create Page
-def appointments_create(request):
-    return HttpResponse("Appointment create page working")
 
 
 
@@ -278,35 +283,36 @@ def appointment_history(request):
 # Dashboard Page
 @login_required(login_url='login')
 def dashboard(request):
-    # Only customers allowed
     if request.user.role != 'customer':
         raise Http404("Page not found")
 
-    user_email = request.user.email
     today = timezone.now().date()
 
-    # All appointments of this customer
-    appointments = Appointment.objects.filter(email=user_email)
+    appointments = (
+        Appointment.objects
+        .filter(email=request.user.email)
+        .select_related('staff', 'payment_method')
+        .prefetch_related('services', 'services__service')
+    )
 
-    # Stats
-    total_appointments = appointments.count()
     upcoming_appointments = appointments.filter(
         appointment_date__gte=today,
         status__in=['pending', 'confirmed']
     )
 
-    completed_appointments = appointments.filter(status='completed').count()
-    cancelled_appointments = appointments.filter(status='cancelled').count()
-
-    services_booked = appointments.values('service').distinct().count()
-
     context = {
-        "appointments": upcoming_appointments.order_by('appointment_date', 'appointment_time')[:5],
-        "total_appointments": total_appointments,
+        "appointments": upcoming_appointments
+            .order_by('appointment_date', 'appointment_time')[:5],
+
+        "total_appointments": appointments.count(),
         "upcoming_count": upcoming_appointments.count(),
-        "completed_count": completed_appointments,
-        "cancelled_count": cancelled_appointments,
-        "services_booked": services_booked,
+        "completed_count": appointments.filter(status='completed').count(),
+        "cancelled_count": appointments.filter(status='cancelled').count(),
+
+        # unique services booked (Haircut, Makeup, etc.)
+        "services_booked": appointments.values_list(
+            'services__service__id', flat=True
+        ).distinct().count(),
     }
 
     return render(request, "dashboard.html", context)

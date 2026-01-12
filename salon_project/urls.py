@@ -19,3 +19,9 @@ urlpatterns = [
 admin.site.site_header = 'Salon Management System'
 admin.site.site_title = 'Salon Admin'
 admin.site.index_title = 'Admin Panel'
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )
