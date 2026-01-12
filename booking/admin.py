@@ -99,7 +99,6 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_display = (
         'customer_name',
         'customer_email',
-        'service',
         'appointment_date',
         'appointment_time',
         'status',
@@ -110,7 +109,6 @@ class AppointmentAdmin(admin.ModelAdmin):
     list_filter = (
         'status',
         'payment_status',
-        'service',
         'appointment_date',
     )
 
@@ -118,7 +116,6 @@ class AppointmentAdmin(admin.ModelAdmin):
         'name',
         'email',
         'phone',
-        'service',
     )
 
     ordering = ('-created_at',)
@@ -127,18 +124,7 @@ class AppointmentAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('Customer Info', {
-            'fields': ('name', 'email', 'phone', 'customer_type')
-        }),
-        ('Service Info', {
-            'fields': (
-                'service',
-                'haircut_type',
-                'manicure_type',
-                'pedicure_type',
-                'makeup_type',
-                'skincare_type',
-                'nailextension_type',
-            )
+            'fields': ('name', 'email', 'phone')
         }),
         ('Appointment', {
             'fields': ('appointment_date', 'appointment_time')

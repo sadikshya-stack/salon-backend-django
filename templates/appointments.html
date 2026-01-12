@@ -352,6 +352,9 @@ button:hover {
             </div>
 
             <input type="tel" name="phone" id="phone" placeholder="Phone Number" style="margin-top: 18px;" required>
+            <small id="phoneError" style="color: red; display: none;">
+                Phone number must be exactly 10 digits.
+            </small>
 
             <input type="date" name="appointment_date" id="date" required>
 
@@ -364,6 +367,17 @@ button:hover {
                 <option value="digital">Esewa / Khalti</option>
             </select>
 
+            <div style="background:#fff8e6; border:1px solid #D4AF37; padding:14px; border-radius:10px; margin:20px 0;">
+                <strong>Important Information:</strong>
+                <ul style="margin-top:10px; padding-left:18px;">
+                    <li>Our service time is <strong>9:00 AM to 6:00 PM</strong> every day.</li>
+                    <li>Same-day appointments must be booked at least 2 hours in advance.</li>
+                    <li>Due to high demand, appointments are subject to staff availability.</li>
+                    <li>If staff is unavailable, your appointment may be cancelled.</li>
+                    <li>Please arrive <strong>30 minutes early</strong> for your appointment.</li>
+                </ul>
+            </div>
+
             <button type="submit">Book Appointment</button>
         </form>
     </div>
@@ -375,7 +389,7 @@ button:hover {
     const dateInput = document.getElementById('date');
 
     const today = new Date();
-    today.setDate(today.getDate() + 2); // add 2 days
+    today.setDate(today.getDate());
 
     const year = today.getFullYear();
     const month = String(today.getMonth() + 1).padStart(2, '0');
@@ -397,6 +411,89 @@ document.querySelectorAll('.service-card').forEach(card => {
             box.style.display = checkbox.checked ? 'block' : 'none';
         }
     });
+});
+
+
+/* -------------------------
+   PHONE VALIDATION
+-------------------------- */
+const form = document.getElementById('appointmentForm');
+const phoneInput = document.getElementById('phone');
+const phoneError = document.getElementById('phoneError');
+
+form.addEventListener('submit', function (e) {
+    const phone = phoneInput.value.trim();
+
+    // Allow only digits
+    if (!/^\d+$/.test(phone)) {
+        phoneError.innerText = "Phone number must contain only digits.";
+        phoneError.style.display = "block";
+        phoneInput.style.marginBottom = "0px";
+        phoneError.style.marginBottom = "18px";
+        e.preventDefault();
+        return;
+    }
+
+    // Must be exactly 10 digits
+    if (phone.length !== 10) {
+        phoneError.innerText = "Phone number must be exactly 10 digits.";
+        phoneError.style.display = "block";
+        phoneInput.style.marginBottom = "0px";
+        phoneError.style.marginBottom = "18px";
+        e.preventDefault();
+        return;
+    }
+
+    // Hide error if valid
+    phoneError.style.display = "none";
+    phoneInput.style.marginBottom = "18px";
+    phoneError.style.marginBottom = "0px";
+
+
+
+    /* ---------- SERVICE CHECKBOX VALIDATION ---------- */
+    const serviceCards = document.querySelectorAll('.service-card input[type="checkbox"]');
+    let anyServiceChecked = false;
+
+    serviceCards.forEach(cb => {
+        if (cb.checked) anyServiceChecked = true;
+    });
+
+    if (!anyServiceChecked) {
+        alert("Please select at least one service.");
+        e.preventDefault();
+        return;
+    }
+
+    /* ---------- SERVICE TYPE VALIDATION ---------- */
+    const serviceTypeMap = {
+        haircut: 'haircut_type',
+        manicure: 'manicure_type',
+        pedicure: 'pedicure_type',
+        makeup: 'makeup_type',
+        skincare: 'skincare_type',
+        nailextension: 'nailextension_type'
+    };
+
+    for (const service in serviceTypeMap) {
+        const checkbox = document.querySelector(`input[value="${service}"]`);
+        if (checkbox && checkbox.checked) {
+
+            const radios = document.getElementsByName(serviceTypeMap[service]);
+            let typeSelected = false;
+
+            radios.forEach(radio => {
+                if (radio.checked) typeSelected = true;
+            });
+
+            if (!typeSelected) {
+                alert(`Please select a type for ${service.charAt(0).toUpperCase() + service.slice(1)}.`);
+                e.preventDefault();
+                return;
+            }
+        }
+    }
+
 });
 </script>
 {% endblock %}

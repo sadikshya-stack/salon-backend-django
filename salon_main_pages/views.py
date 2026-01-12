@@ -63,6 +63,20 @@ def appointments(request):
         messages.error(request, "You are not authorized to access this page.")
         return redirect('login')  # or redirect('home')
 
+    # ----------------------------
+    # DATA FOR TEMPLATE (GET)
+    # ----------------------------
+    services = Service.objects.filter(is_active=True).prefetch_related('types')
+    payment_methods = PaymentMethod.objects.filter(is_active=True)
+
+    context = {
+        'services': services,
+        'payment_methods': payment_methods,
+    }
+
+    # ----------------------------
+    # HANDLE FORM SUBMISSION (POST)
+    # ----------------------------
     if request.method == "POST":
 
         user = request.user
@@ -72,27 +86,41 @@ def appointments(request):
         # ----------------------------
         phone = request.POST.get('phone', '').strip()
 
-        if not phone:
-            messages.error(request, "Phone number is required.")
+        if not phone or not phone.isdigit() or len(phone) != 10:
+            messages.error(request, "Enter a valid 10-digit phone number.")
             return redirect('appointments')
 
-        if not phone.isdigit():
-            messages.error(request, "Phone number must contain only digits.")
+        # ----------------------------
+        # SERVICE TYPE VALIDATION
+        # ----------------------------
+        service_type_id = request.POST.get('service_type')
+
+        if not service_type_id:
+            messages.error(request, "Please select a service type.")
             return redirect('appointments')
 
-        if len(phone) != 10:
-            messages.error(request, "Phone number must be exactly 10 digits.")
+        try:
+            service_type = ServiceType.objects.select_related('service').get(
+                id=service_type_id,
+                is_active=True
+            )
+        except ServiceType.DoesNotExist:
+            messages.error(request, "Invalid service selection.")
             return redirect('appointments')
 
-        # services selected (checkboxes)
-        services = request.POST.getlist('service')
+        # ----------------------------
+        # PAYMENT METHOD VALIDATION
+        # ----------------------------
+        payment_method_id = request.POST.get('payment_method')
 
-        if not services:
-            messages.error(request, "Please select at least one service.")
+        try:
+            payment_method = PaymentMethod.objects.get(
+                id=payment_method_id,
+                is_active=True
+            )
+        except PaymentMethod.DoesNotExist:
+            messages.error(request, "Please select a valid payment method.")
             return redirect('appointments')
-
-        # we will save ONE appointment per submission
-        service = services[0]  # primary service
 
         # ----------------------------
         # DATE & TIME VALIDATION
@@ -121,30 +149,43 @@ def appointments(request):
             return redirect('appointments')
 
         # ----------------------------
+        # TODAY TIME VALIDATION (NEW)
+        # ----------------------------
+        now = timezone.localtime()
+        selected_datetime = timezone.make_aware(
+            datetime.combine(appointment_date, selected_time)
+        )
+
+        if appointment_date == now.date():
+            if selected_datetime <= now:
+                messages.error(request, "Please select a future time.")
+                return redirect('appointments')
+
+            if selected_datetime < now + timedelta(hours=2):
+                messages.error(
+                    request,
+                    "Same-day appointments must be booked at least 2 hours in advance."
+                )
+                return redirect('appointments')
+
+
+        # ----------------------------
         # CREATE APPOINTMENT
         # ----------------------------
-
         appointment = Appointment.objects.create(
             name=user.get_full_name() or user.username,
             email=user.email,
-            phone=request.POST.get('phone'),
-
-            service=service,
-
-            haircut_type=request.POST.get('haircut_type'),
-            manicure_type=request.POST.get('manicure_type'),
-            pedicure_type=request.POST.get('pedicure_type'),
-            makeup_type=request.POST.get('makeup_type'),
-            skincare_type=request.POST.get('skincare_type'),
-            nailextension_type=request.POST.get('nailextension_type'),
+            phone=phone,
 
             appointment_date=appointment_date,
             appointment_time=selected_time,
 
-            payment_method=request.POST.get('payment_method'),
-
-            status='pending'  # explicit (even though default)
+            payment_method=payment_method,
+            status='pending',
         )
+
+        # link selected service type
+        appointment.services.add(service_type)
 
         # AUTO SLOT CHECK + EMAIL
         slot_confirmed = process_appointment_slot(appointment)

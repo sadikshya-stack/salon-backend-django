@@ -37,39 +37,6 @@ def process_appointment_slot(appointment):
     appointment_end = appointment_datetime + timedelta(minutes=60)
 
     # ---------------------------
-    # CHECK EXISTING APPOINTMENTS ❌
-    # ---------------------------
-    conflict_exists = Appointment.objects.filter(
-        appointment_date=appointment.appointment_date,
-        appointment_time=appointment.appointment_time,
-        status__in=['pending', 'confirmed']
-    ).exclude(id=appointment.id).exists()
-
-    if conflict_exists:
-        appointment.status = 'cancelled'
-        appointment.cancelled_reason = "Time slot already booked"
-        appointment.cancelled_at = datetime.now()
-        appointment.save()
-
-        send_mail(
-            subject="Appointment Not Available – Glamour Touch",
-            message=(
-                f"Dear {appointment.name},\n\n"
-                f"The appointment slot you selected has already been booked.\n\n"
-                f"📅 Date: {appointment.appointment_date}\n"
-                f"⏰ Time: {appointment.appointment_time}\n\n"
-                f"Please choose another available time slot.\n\n"
-                f"Thank you for your understanding.\n"
-                f"Glamour Touch"
-            ),
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[appointment.email],
-            fail_silently=False,
-        )
-
-        return False
-
-    # ---------------------------
     # FIND AVAILABLE SLOT ✅
     # ---------------------------
     slot = AvailableSlot.objects.filter(

@@ -56,7 +56,7 @@ class ServiceType(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    duration_minutes = models.IntegerField(blank=True)
+    duration_minutes = models.IntegerField(blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -91,6 +91,33 @@ class Staff(models.Model):
         return f"{self.user.first_name} {self.user.last_name}"
 
 
+class PaymentMethod(models.Model):
+
+    class Meta:
+        db_table = 'payment_methods'
+
+    name = models.CharField(max_length=50, unique=True)
+    code = models.CharField(
+        max_length=30,
+        unique=True,
+        help_text="e.g. cash, esewa, khalti, stripe"
+    )
+
+    description = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)
+
+    service_fee = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        default=0,
+        help_text="Extra charge for this payment method"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
 
 
 class Appointment(models.Model):
@@ -99,24 +126,32 @@ class Appointment(models.Model):
         db_table = 'appointments'
 
     # ---------------------------
-    # SERVICE & PAYMENT CHOICES
+    # SERVICES (IMPORTANT)
     # ---------------------------
-    SERVICE_CHOICES = [
-        ('haircut', 'Haircut'),
-        ('manicure', 'Manicure'),
-        ('pedicure', 'Pedicure'),
-        ('makeup', 'Makeup'),
-        ('skincare', 'Skincare'),
-        ('nailextension', 'Nail Extension'),
-        ('other', 'Other Services'),
-    ]
+    services = models.ManyToManyField(
+        ServiceType,
+        related_name='appointments',
+        help_text="Selected services for this appointment"
+    )
 
-    PAYMENT_CHOICES = [
-        ('cash', 'Cash'),
-        ('card', 'Card'),
-        ('digital', 'Digital Payment'),
-        ('bank', 'Bank Transfer'),
-    ]
+    # ---------------------------
+    # STAFF ASSIGNMENT
+    # ---------------------------
+    staff = models.ForeignKey(
+        Staff,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='appointments',
+        help_text="Staff assigned to this appointment"
+    )
+
+    payment_method = models.ForeignKey(
+        PaymentMethod,
+        on_delete=models.PROTECT,
+        related_name='appointments'
+    )
+
 
     # ---------------------------
     # APPOINTMENT STATUS
@@ -126,16 +161,6 @@ class Appointment(models.Model):
         ('confirmed', 'Confirmed'),
         ('completed', 'Completed'),
         ('cancelled', 'Cancelled'),
-        ('no_show', 'No Show'),
-    ]
-
-    # ---------------------------
-    # CUSTOMER TYPE (OPTIONAL)
-    # ---------------------------
-    CUSTOMER_TYPE_CHOICES = [
-        ('new', 'New Customer'),
-        ('returning', 'Returning Customer'),
-        ('vip', 'VIP Customer'),
     ]
 
     # ---------------------------
@@ -145,23 +170,6 @@ class Appointment(models.Model):
     email = models.EmailField(default="example@example.com")
     phone = models.CharField(max_length=10, default="0000000000")
 
-    customer_type = models.CharField(
-        max_length=20,
-        choices=CUSTOMER_TYPE_CHOICES,
-        default='new'
-    )
-
-    # ---------------------------
-    # SERVICE DETAILS
-    # ---------------------------
-    service = models.CharField(max_length=20, choices=SERVICE_CHOICES, default="haircut")
-
-    haircut_type = models.CharField(max_length=50, blank=True, null=True)
-    makeup_type = models.CharField(max_length=50, blank=True, null=True)
-    manicure_type = models.CharField(max_length=50, blank=True, null=True)
-    pedicure_type = models.CharField(max_length=50, blank=True, null=True)
-    skincare_type = models.CharField(max_length=50, blank=True, null=True)
-    nailextension_type = models.CharField(max_length=50, blank=True, null=True)
 
     # ---------------------------
     # APPOINTMENT SCHEDULE
@@ -172,7 +180,6 @@ class Appointment(models.Model):
     # ---------------------------
     # PAYMENT
     # ---------------------------
-    payment_method = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='cash')
     payment_status = models.BooleanField(default=False)  # Paid or Not
 
     # ---------------------------
@@ -202,7 +209,7 @@ class Appointment(models.Model):
     # STRING REPRESENTATION
     # ---------------------------
     def __str__(self):
-        return f"{self.name} | {self.service} | {self.appointment_date} | {self.status}"
+        return f"{self.name} | {self.appointment_date} | {self.status}"
 
 # ---------- Product ----------
 class Product(models.Model):
