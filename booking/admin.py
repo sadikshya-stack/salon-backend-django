@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Service, ServiceType, Staff, Appointment, Product, Order, OrderItem, AvailableSlot, Contact, PaymentMethod
+from .models import User, Service, ServiceType, Staff, Appointment, AvailableSlot, Contact, PaymentMethod
 from django.utils.html import format_html
 
 
@@ -158,40 +158,6 @@ class AppointmentAdmin(admin.ModelAdmin):
         return obj.email
     customer_email.short_description = "Email"
 
-
-# ---------- Product Admin ----------
-@admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'quantity', 'category', 'is_active')
-    list_filter = ('category', 'is_active')
-    search_fields = ('name', 'description')
-
-
-# ---------- Order Admin ----------
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'customer_name', 'total_amount', 'status')
-    list_filter = ('status',)
-    search_fields = ('customer__first_name', 'customer__last_name')
-
-    def customer_name(self, obj):
-        return f"{obj.customer.first_name} {obj.customer.last_name}" if obj.customer else "No Customer"
-    customer_name.short_description = 'Customer'
-
-
-# ---------- OrderItem Admin ----------
-@admin.register(OrderItem)
-class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ('order_id', 'product_name', 'quantity', 'price')
-    search_fields = ('product__name', 'order__customer__first_name')
-
-    def order_id(self, obj):
-        return obj.order.id if obj.order else "No Order"
-    order_id.short_description = 'Order ID'
-
-    def product_name(self, obj):
-        return obj.product.name if obj.product else "No Product"
-    product_name.short_description = 'Product'
 
 
 # ---------- AvailableSlot Admin ----------

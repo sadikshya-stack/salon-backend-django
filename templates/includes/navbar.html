@@ -20,7 +20,6 @@
                     <a href="{% url 'gallery' %}" class="nav-item d-flex align-items-center nav-link {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}">Gallery</a>
                     <a href="{% url 'contact' %}" class="nav-item d-flex align-items-center nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a>
                     <a href="{% url 'appointments' %}" class="nav-item d-flex align-items-center nav-link {% if request.resolver_match.url_name == 'appointment' %}active{% endif %}">Appointment</a>
-                    <a href="{% url 'products' %}" class="nav-item d-flex align-items-center nav-link {% if request.resolver_match.url_name == 'products' %}active{% endif %}">Products</a>
                 </div>
                 {% if request.user.is_authenticated and request.user.role == 'customer' %}
                     <div class="nav-item dropdown">

@@ -14,15 +14,11 @@ from django.utils import timezone
 
 # Home Page
 def home(request):
+    services = Service.objects.filter(is_active=True).prefetch_related('types')
     context = {
         "title": "Welcome to Beauty Parlour",
         "description": "Book beauty services easily and quickly",
-        "services": [
-            "Hair Cut",
-            "Facial",
-            "Makeup",
-            "Massage",
-        ]
+        "services": services,
     }
     return render(request, "home.html", context)
 
@@ -44,14 +40,10 @@ def gallery(request):
 
 # Services Page
 def services(request):
+    services = Service.objects.filter(is_active=True).prefetch_related('types')
     context = {
         "title": "Our Services",
-        "services": [
-            {"name": "Hair Cut", "price": 500},
-            {"name": "Facial", "price": 1500},
-            {"name": "Makeup", "price": 3000},
-            {"name": "Massage", "price": 2000},
-        ]
+        "services": services,
     }
     return render(request, "services.html", context)
 
@@ -205,7 +197,7 @@ def appointments(request):
                 "Your appointment has been booked and confirmed! "
                 "Please check your email for schedule details. "
                 "You can also check your appointment status and details anytime from your account. "
-                "Kindly arrive 30 minutes before your appointment time."
+                "Kindly arrive 10 minutes before your appointment time."
                 "Thank you for choosing us!"
             )
         else:

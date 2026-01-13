@@ -1,4 +1,4 @@
-    {% extends 'base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Services - Glamour Touch{% endblock %}
@@ -24,59 +24,15 @@
         <h1 class="mb-5">Explore Our Services</h1>
             </div>
         <div class="row g-4 g-md-0 text-center">
+            {% for service in services %}
                 <div class="col-md-6 col-lg-4">
                     <div class="service-item h-100 p-4 border-bottom border-end wow fadeIn" data-wow-delay="0.1s">
-                        <img src="{% static 'img/haircut.png' %}" alt="haircut">
-                        <h3 class="mb-3">Haircut</h3>
-                        <p class="mb-3">Refresh your look with a professional haircut tailored to your style. Whether you want a classic trim, trendy layers, or a complete transformation,
-                             we ensure precision and care for a perfect finish every time.</p>
+                        <img src="{{service.image.url}}" alt="{{service.name}}" >
+                        <h3 class="mb-3">{{service.name}}</h3>
+                        <p class="mb-3">{{service.description}}</p>
                     </div>
                 </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="service-item h-100 p-4 border-bottom border-lg-end wow fadeIn" data-wow-delay="0.3s">
-                        <img class="img-fluid" src="{% static 'img/makeup.png' %}" alt="">
-                        <h3 class="mb-3">Makeup</h3>
-                        <p class="mb-3">Enhance your natural beauty with our professional makeup services. From everyday elegance to glamorous looks for special occasions,
-                            we create a flawless finish that highlights your best features.</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="service-item h-100 p-4 border-bottom border-end border-lg-end-0 wow fadeIn"
-                        data-wow-delay="0.5s">
-                        <img class="img-fluid" src="{% static 'img/manicure.png' %}" alt="">
-                        <h3 class="mb-3">Manicure</h3>
-                        <p class="mb-3">Pamper your hands with our professional manicure services.From classic nail 
-                            care to trendy designs, we ensure your nails look healthy, polished, and perfectly styled.</p>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="service-item h-100 p-4 border-bottom border-lg-bottom-0 border-lg-end wow fadeIn"
-                        data-wow-delay="0.1s">
-                        <img class="img-fluid" src="{% static 'img/pedicure.png' %}" alt="">
-                        <h3 class="mb-3">Pedicure</h3>
-                        <p class="mb-3">Treat your feet to a relaxing pedicure. From nail care and exfoliation to stylish polish, 
-                            we keep your feet healthy, soft, and beautifully groomed.</p>
-                        
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="service-item h-100 p-4 border-end wow fadeIn" data-wow-delay="0.5s">
-                        <img class="img-fluid" src="{% static 'img/nailextension.jpg' %}" alt="">
-                        <h3 class="mb-3">Nail Extension</h3>
-                        <p class="mb-3">Enhance your nails by adding length and shape using acrylic 
-                            or gel,giving a long lasting and polished look.</p>
-                 
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-4">
-                    <div class="service-item h-100 p-4 wow fadeIn" data-wow-delay="0.5s">
-                        <img class="img-fluid" src="{% static 'img/skin-care.png' %}" alt="">
-                        <h3 class="mb-3">Skin Care</h3>
-                        <p class="mb-3">Nourish and refresh your skin with our professional skin care treatments. 
-                            From deep cleansing to hydration and glow-boosting therapies, we help you achieve healthy, radiant skin.</p>
-
-                    </div>
-                </div>
+            {% endfor %}
             </div>
         </div>
     </div>
