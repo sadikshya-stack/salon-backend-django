@@ -1,0 +1,39 @@
+<div class="admin-topbar">
+    <button class="admin-toggle-sidebar" id="toggleSidebar">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="admin-search">
+        <i class="fas fa-search"></i>
+        <input type="text" class="form-control" placeholder="Search...">
+    </div>
+
+    <div class="admin-topbar-right">
+        <div class="admin-notification">
+            <button class="admin-notification-btn">
+                <i class="far fa-bell"></i>
+                <span class="admin-notification-badge">3</span>
+            </button>
+        </div>
+
+         <div class="dropdown admin-profile">
+                        <button class="admin-profile-btn d-flex align-items-center" data-bs-toggle="dropdown">
+                            <img src="https://ui-avatars.com/api/?name=Admin+User&background=d63384&color=fff" alt="Admin" class="admin-profile-img">
+                            <span class="admin-profile-name d-none d-md-inline">Admin User</span>
+                            <i class="fas fa-chevron-down d-none d-md-inline ms-1" style="font-size: 0.8rem;"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="admin-profile.html">
+                                <i class="fas fa-user me-2"></i>Profile
+                            </a>
+                            <a class="dropdown-item" href="admin-settings.html">
+                                <i class="fas fa-cog me-2"></i>Settings
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item text-danger" href="login.html">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a>
+                        </div>
+                    </div>
+    </div>
+</div>

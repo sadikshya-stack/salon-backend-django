@@ -13,6 +13,7 @@ urlpatterns = [
     # Root URL
     path('', include('salon_main_pages.urls')),
     path('', include('booking.urls')), 
+    path('adminpanel/', include('admin_panel.urls')), 
 ]
 
 # Admin site customizations

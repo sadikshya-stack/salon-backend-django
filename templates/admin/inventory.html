@@ -1,0 +1,146 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Inventory{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">Inventory Management</h4>
+
+<table class="table admin-table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Stock</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in inventory %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+
+ <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0">Inventory Management</h4>
+                    <button class="btn btn-primary" id="addInventoryBtn">
+                        <i class="fas fa-plus me-2"></i>Add New Item
+                    </button>
+                </div>
+                
+                <!-- Stats Row -->
+                <div class="row admin-stats-row mb-4">
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">
+                                <i class="fas fa-boxes"></i>
+                            </div>
+                            <h3 class="admin-stat-value" id="totalProducts">0</h3>
+                            <p class="admin-stat-label">Total Products</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <h3 class="admin-stat-value" id="inStockItems">0</h3>
+                            <p class="admin-stat-label">In Stock</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h3 class="admin-stat-value" id="lowStockItems">0</h3>
+                            <p class="admin-stat-label">Low Stock</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3 mb-4">
+                        <div class="admin-stat-card">
+                            <div class="admin-stat-icon">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <h3 class="admin-stat-value" id="outOfStockItems">0</h3>
+                            <p class="admin-stat-label">Out of Stock</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filters and Search -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Category</label>
+                                <select class="form-select" id="categoryFilter">
+                                    <option value="">All Categories</option>
+                                    <option value="hair">Hair Care</option>
+                                    <option value="skin">Skin Care</option>
+                                    <option value="makeup">Makeup</option>
+                                    <option value="nails">Nail Care</option>
+                                    <option value="tools">Tools & Equipment</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Stock Status</label>
+                                <select class="form-select" id="stockFilter">
+                                    <option value="">All Items</option>
+                                    <option value="in-stock">In Stock</option>
+                                    <option value="low-stock">Low Stock</option>
+                                    <option value="out-of-stock">Out of Stock</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Search</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="inventorySearch" placeholder="Search products...">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Inventory Table -->
+                <div class="card">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Price</th>
+                                        <th>Stock</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryTableBody">
+                                    <!-- Inventory items will be loaded here dynamically -->
+                                     {% for item in inventory %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.status }}</td>
+            <td></td>
+        </tr>
+        {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                {% endblock %}

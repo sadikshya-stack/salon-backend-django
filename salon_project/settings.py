@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # Local apps
     'booking',
     'salon_main_pages',
+    'admin_panel'
 ]
 
 # MIDDLEWARE

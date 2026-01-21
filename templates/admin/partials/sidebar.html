@@ -1,0 +1,30 @@
+<div class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-header">
+        <h3><i class="bi bi-scissors me-2"></i>Admin</h3>
+    </div>
+
+    <div class="admin-sidebar-nav">
+        <div class="admin-nav-title">Main</div>
+
+        <a href="{% url 'adminpanel-dashboard' %}" class="admin-nav-link">
+            <i class="fas fa-tachometer-alt"></i> Dashboard
+        </a>
+
+        {% comment %} <a href="{% url 'adminpanel-appointments' %}" class="admin-nav-link">
+            <i class="far fa-calendar-alt"></i> Appointments
+        </a> {% endcomment %}
+
+        {% comment %} <a href="admin-services.html" class="admin-nav-link">
+                    <i class="fas fa-spa"></i>
+                    <span>Services</span>
+                </a> {% endcomment %}
+
+        <a href="{% url 'adminpanel-inventory' %}" class="admin-nav-link">
+            <i class="fas fa-boxes"></i> Inventory
+        </a>
+
+        {% comment %} <a href="{% url 'adminpanel-staff' %}" class="admin-nav-link">
+            <i class="fas fa-users"></i> Staff
+        </a> {% endcomment %}
+    </div>
+</div>

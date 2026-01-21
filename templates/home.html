@@ -97,7 +97,9 @@
             {% for service in services %}
                 <div class="col-md-6 col-lg-4">
                     <div class="service-item h-100 p-4 border-bottom border-end wow fadeIn" data-wow-delay="0.1s">
+                        {% if service.image %}
                         <img src="{{service.image.url}}" alt="{{service.name}}" >
+                        {% endif %}
                         <h3 class="mb-3">{{service.name}}</h3>
                         <p class="mb-3">{{service.description}}</p>
                     </div>
