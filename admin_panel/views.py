@@ -2,10 +2,18 @@ from django.shortcuts import render
 from booking.models import InventoryItem, Service, Appointment, User
 from django.shortcuts import render
 from django.utils.timezone import now
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 
 
+@login_required(login_url='/login/')
 def admin_dashboard(request):
+    if not request.user.is_superuser:  # or request.user.role != 'admin'
+       messages.error(request, "Only Admins are authorized to access this page. Login first.")
+       return redirect('/login')  # redirect to some page if not admin
+
+
     today = now().date()
 
     context = {
@@ -43,10 +51,14 @@ def admin_dashboard(request):
         )[:5],
     }
 
-    return render(request, "admin/dashboard.html", context)
+    return render(request, "salon_admin/dashboard.html", context)
 
-
+@login_required(login_url='/login/')
 def admin_inventory(request):
+    if not request.user.is_superuser:  # or request.user.role != 'admin'
+       messages.error(request, "Only Admins are authorized to access this page. Login first.")
+       return redirect('/login')  # redirect to some page if not admin
+
     items = InventoryItem.objects.filter(is_active=True).select_related('category')
 
     context = {
@@ -57,5 +69,5 @@ def admin_inventory(request):
         'out_of_stock': items.filter(status=InventoryItem.StockStatus.OUT_OF_STOCK).count(),
     }
 
-    return render(request, 'admin/inventory.html', context)
+    return render(request, 'salon_admin/inventory.html', context)
 

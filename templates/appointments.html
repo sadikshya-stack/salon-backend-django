@@ -190,7 +190,10 @@ button:hover {
                             name="services"
                             value="{{ service.id }}">
 
-                        <div class="service-icon"><img src="{{ service.image.url }}" alt="{{ service.name }}"></div>
+                        <div class="service-icon">
+                            {% if service.image %}
+                        <img src="{{service.image.url}}" alt="{{service.name}}" >
+                        {% endif %}</div>
                         {{ service.name }}
                     </label>
                 {% endfor %}

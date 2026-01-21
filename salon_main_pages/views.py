@@ -2,10 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth import get_user_model
-User = get_user_model()
 from django.contrib import messages
-from booking.models import Appointment, Contact, Service, PaymentMethod, ServiceType
+from booking.models import Appointment, Contact, Service, User, PaymentMethod, ServiceType
 from datetime import datetime, time, timedelta
 from booking.utils import process_appointment_slot
 from django.http import Http404
@@ -275,7 +273,7 @@ def appointment_history(request):
 # Dashboard Page
 @login_required(login_url='login')
 def dashboard(request):
-    if request.user.role != 'customer':
+    if request.user.role != 'customer' or request.user.is_superuser:
         raise Http404("Page not found")
 
     today = timezone.now().date()
@@ -320,23 +318,22 @@ def login_view(request):
         user = authenticate(request, username=email, password=password)
 
         if user is not None:
-            if user.role != 'customer':
-                return render(request, 'auth/login.html', {
-                    'error': 'Only customers are allowed to login here.'
-                })
-
             if not user.is_active:
-                return render(request, 'auth/login.html', {
-                    'error': 'Your account is inactive.'
-                })
+                messages.error(request, "Your account is inactive.")
+                return render(request, 'auth/login.html')
 
+            # Log the user in
             login(request, user)
-            return redirect('dashboard')  # customer dashboard
+
+            # Redirect based on role
+            if user.is_superuser or user.role != 'customer':
+                return redirect('/adminpanel/dashboard/')
+            else:
+                return redirect('/dashboard/')  # customer dashboard
 
         else:
-            return render(request, 'auth/login.html', {
-                'error': 'Invalid email or password'
-            })
+            messages.error(request, "Invalid email or password")
+            return render(request, 'auth/login.html')
 
     return render(request, 'auth/login.html')
 
@@ -382,6 +379,7 @@ def register_view(request):
         
         user = User.objects.create_user(
             username=username,
+            role="customer",
             email=email,
             password=password
         )
