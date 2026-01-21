@@ -3,198 +3,178 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+
 <h4 class="mb-4">Dashboard Overview</h4>
-                
-                <!-- Stats Row -->
-                <div class="row admin-stats-row">
-                    <div class="col-md-6 col-lg-3 mb-4">
-                        <div class="admin-stat-card">
-                            <div class="admin-stat-icon">
-                                <i class="far fa-calendar-check"></i>
-                            </div>
-                            <h3 class="admin-stat-value">24</h3>
-                            <p class="admin-stat-label">Today's Appointments</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 mb-4">
-                        <div class="admin-stat-card">
-                            <div class="admin-stat-icon">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <h3 class="admin-stat-value">12</h3>
-                            <p class="admin-stat-label">Pending Approvals</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 mb-4">
-                        <div class="admin-stat-card">
-                            <div class="admin-stat-icon">
-                                <i class="fas fa-spa"></i>
-                            </div>
-                            <h3 class="admin-stat-value">36</h3>
-                            <p class="admin-stat-label">Total Services</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3 mb-4">
-                        <div class="admin-stat-card">
-                            <div class="admin-stat-icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <h3 class="admin-stat-value">248</h3>
-                            <p class="admin-stat-label">Total Customers</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Recent Appointments -->
-                <div class="admin-card">
-                    <div class="admin-card-header">
-                        <h5 class="admin-card-title">Recent Appointments</h5>
-                        <div class="admin-card-actions">
-                            <a href="admin-appointments.html" class="btn btn-outline-primary btn-sm">
-                                <i class="fas fa-list me-1"></i> View All
-                            </a>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table admin-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Customer</th>
-                                    <th>Service</th>
-                                    <th>Date & Time</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>#AP20230001</td>
-                                    <td>John Doe</td>
-                                    <td>Haircut & Styling</td>
-                                    <td>Jun 25, 2023, 10:00 AM</td>
-                                    <td><span class="badge badge-pending">Pending</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary me-1">View</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>#AP20230002</td>
-                                    <td>Jane Smith</td>
-                                    <td>Facial Treatment</td>
-                                    <td>Jun 25, 2023, 11:30 AM</td>
-                                    <td><span class="badge badge-confirmed">Confirmed</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary me-1">View</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>#AP20230003</td>
-                                    <td>Robert Johnson</td>
-                                    <td>Manicure & Pedicure</td>
-                                    <td>Jun 25, 2023, 2:00 PM</td>
-                                    <td><span class="badge badge-completed">Completed</span></td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary me-1">View</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <!-- Recent Services -->
-                    <div class="col-lg-6">
-                        <div class="admin-card h-100">
-                            <div class="admin-card-header">
-                                <h5 class="admin-card-title">Popular Services</h5>
-                                <div class="admin-card-actions">
-                                    <a href="admin-services.html" class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-plus me-1"></i> Add New
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table admin-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Service</th>
-                                            <th>Category</th>
-                                            <th>Price</th>
-                                            <th>Duration</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Haircut & Styling</td>
-                                            <td>Hair</td>
-                                            <td>$35</td>
-                                            <td>45 min</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Facial Treatment</td>
-                                            <td>Skin Care</td>
-                                            <td>$65</td>
-                                            <td>60 min</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Manicure & Pedicure</td>
-                                            <td>Nails</td>
-                                            <td>$55</td>
-                                            <td>75 min</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Low Stock Items -->
-                    <div class="col-lg-6">
-                        <div class="admin-card h-100">
-                            <div class="admin-card-header">
-                                <h5 class="admin-card-title">Low Stock Items</h5>
-                                <div class="admin-card-actions">
-                                    <a href="admin-inventory.html" class="btn btn-outline-primary btn-sm">
-                                        <i class="fas fa-plus me-1"></i> Add New
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table admin-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Category</th>
-                                            <th>Stock</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Shampoo</td>
-                                            <td>Hair Care</td>
-                                            <td>3</td>
-                                            <td><span class="badge bg-danger">Low</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Nail Polish - Red</td>
-                                            <td>Nail Care</td>
-                                            <td>2</td>
-                                            <td><span class="badge bg-danger">Low</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Facial Mask</td>
-                                            <td>Skin Care</td>
-                                            <td>5</td>
-                                            <td><span class="badge bg-warning">Medium</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+<!-- Stats -->
+<div class="row admin-stats-row">
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="admin-stat-card">
+            <div class="admin-stat-icon">
+                <i class="far fa-calendar-check"></i>
+            </div>
+            <h3 class="admin-stat-value">{{ today_appointments }}</h3>
+            <p class="admin-stat-label">Today's Appointments</p>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="admin-stat-card">
+            <div class="admin-stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <h3 class="admin-stat-value">{{ pending_appointments }}</h3>
+            <p class="admin-stat-label">Pending Approvals</p>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="admin-stat-card">
+            <div class="admin-stat-icon">
+                <i class="fas fa-spa"></i>
+            </div>
+            <h3 class="admin-stat-value">{{ total_services }}</h3>
+            <p class="admin-stat-label">Total Services</p>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-lg-3 mb-4">
+        <div class="admin-stat-card">
+            <div class="admin-stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h3 class="admin-stat-value">{{ total_customers }}</h3>
+            <p class="admin-stat-label">Total Customers</p>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Appointments -->
+<div class="admin-card mb-4">
+    <div class="admin-card-header">
+        <h5 class="admin-card-title">Recent Appointments</h5>
+        <a href="{% url 'admin_appointments' %}" class="btn btn-outline-primary btn-sm">
+            <i class="fas fa-list me-1"></i> View All
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Service</th>
+                    <th>Date & Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appt in recent_appointments %}
+                <tr>
+                    <td>#{{ appt.id }}</td>
+                    <td>{{ appt.customer.get_full_name }}</td>
+                    <td>{{ appt.service.name }}</td>
+                    <td>{{ appt.date }} {{ appt.time }}</td>
+                    <td>
+                        <span class="badge 
+                            {% if appt.status == 'pending' %}bg-warning
+                            {% elif appt.status == 'confirmed' %}bg-primary
+                            {% else %}bg-success{% endif %}">
+                            {{ appt.get_status_display }}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No recent appointments</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Popular Services -->
+    <div class="col-lg-6">
+        <div class="admin-card h-100">
+            <div class="admin-card-header">
+                <h5 class="admin-card-title">Popular Services</h5>
+                <a href="{% url 'admin_services' %}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-plus me-1"></i> Add New
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table admin-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for service in popular_services %}
+                        <tr>
+                            <td>{{ service.name }}</td>
+                            <td>{{ service.category.name }}</td>
+                            <td>NPR {{ service.price }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center">No services found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Low Stock -->
+    <div class="col-lg-6">
+        <div class="admin-card h-100">
+            <div class="admin-card-header">
+                <h5 class="admin-card-title">Low Stock Items</h5>
+                <a href="{% url 'admin_inventory' %}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-box me-1"></i> Inventory
+                </a>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table admin-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in low_stock_items %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.category.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>
+                                <span class="badge bg-danger">
+                                    {{ item.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No low stock items 🎉</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

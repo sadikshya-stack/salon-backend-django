@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Service, ServiceType, Staff, Appointment, AvailableSlot, Contact, PaymentMethod
+from .models import User, Service, ServiceType, Staff, Appointment, AvailableSlot, Contact, PaymentMethod, InventoryItem, InventoryCategory
 from django.utils.html import format_html
 
 
@@ -178,3 +178,31 @@ class AvailableSlotAdmin(admin.ModelAdmin):
 admin.site.register(Contact)
 admin.site.register(ServiceType)
 admin.site.register(PaymentMethod)
+
+
+
+
+
+@admin.register(InventoryCategory)
+class InventoryCategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "is_active", "created_at")
+    prepopulated_fields = {"slug": ("name",)}
+    search_fields = ("name",)
+    list_filter = ("is_active",)
+
+
+
+@admin.register(InventoryItem)
+class InventoryItemAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "category",
+        "brand",
+        "quantity",
+        "status",
+        "unit_price",
+        "is_active",
+    )
+    list_filter = ("status", "category", "is_active")
+    search_fields = ("name", "brand")
+    readonly_fields = ("status", "created_at", "updated_at")

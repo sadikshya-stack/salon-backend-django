@@ -252,3 +252,98 @@ class Contact(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.subject}"
+
+
+
+
+
+class InventoryCategory(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.SlugField(max_length=120, unique=True, blank=True)
+
+    description = models.TextField(blank=True)
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Inventory Category"
+        verbose_name_plural = "Inventory Categories"
+        ordering = ["name"]
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+
+
+
+
+
+class InventoryItem(models.Model):
+
+    class StockStatus(models.TextChoices):
+        IN_STOCK = "in_stock", "In Stock"
+        LOW_STOCK = "low_stock", "Low Stock"
+        OUT_OF_STOCK = "out_of_stock", "Out of Stock"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    name = models.CharField(max_length=150)
+    category = models.ForeignKey(
+        InventoryCategory,
+        on_delete=models.PROTECT,
+        related_name="items"
+    )
+    brand = models.CharField(max_length=100, blank=True)
+
+    quantity = models.PositiveIntegerField(default=0)
+    min_stock = models.PositiveIntegerField(default=5)
+
+    unit_price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=StockStatus.choices,
+        editable=False
+    )
+
+    description = models.TextField(blank=True)
+
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["name"]
+        indexes = [
+            models.Index(fields=["name"]),
+            models.Index(fields=["status"]),
+            models.Index(fields=["category"]),
+        ]
+
+    def __str__(self):
+        return f"{self.name} ({self.get_status_display()})"
+
+    def update_stock_status(self):
+        if self.quantity <= 0:
+            self.status = self.StockStatus.OUT_OF_STOCK
+        elif self.quantity <= self.min_stock:
+            self.status = self.StockStatus.LOW_STOCK
+        else:
+            self.status = self.StockStatus.IN_STOCK
+
+    def save(self, *args, **kwargs):
+        self.update_stock_status()
+        super().save(*args, **kwargs)
