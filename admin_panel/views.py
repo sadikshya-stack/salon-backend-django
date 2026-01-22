@@ -4,14 +4,15 @@ from django.shortcuts import render
 from django.utils.timezone import now
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
+from django.contrib import messages
 
 
 
 @login_required(login_url='/login/')
 def admin_dashboard(request):
-    if not request.user.is_superuser:  # or request.user.role != 'admin'
-       messages.error(request, "Only Admins are authorized to access this page. Login first.")
-       return redirect('/login')  # redirect to some page if not admin
+    if not (request.user.is_superuser or request.user.is_staff):
+        messages.error(request, "Only Admins or staff are authorized to access this page.")
+        return redirect('/login')
 
 
     today = now().date()
@@ -55,8 +56,8 @@ def admin_dashboard(request):
 
 @login_required(login_url='/login/')
 def admin_inventory(request):
-    if not request.user.is_superuser:  # or request.user.role != 'admin'
-       messages.error(request, "Only Admins are authorized to access this page. Login first.")
+    if not request.user.is_superuser or not request.user.is_staff:  # or request.user.role != 'admin'
+       messages.error(request, "Only Admins or staff are authorized to access this page. Login first.")
        return redirect('/login')  # redirect to some page if not admin
 
     items = InventoryItem.objects.filter(is_active=True).select_related('category')

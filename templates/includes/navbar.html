@@ -21,7 +21,7 @@
                     <a href="{% url 'contact' %}" class="nav-item d-flex align-items-center nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a>
                     <a href="{% url 'appointments' %}" class="nav-item d-flex align-items-center nav-link {% if request.resolver_match.url_name == 'appointment' %}active{% endif %}">Appointment</a>
                 </div>
-                {% if request.user.is_authenticated and request.user.role == 'customer' %}
+                {% if request.user.is_authenticated %}
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
                             <img
@@ -34,10 +34,21 @@
                             <span class="d-none d-lg-inline">{{ request.user.first_name|default:request.user.email }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light mt-2">
-                            <a href="{% url 'dashboard' %}" class="dropdown-item"><i class="fas fa-user me-2"></i>Dashboard</a>
-                            <div class="dropdown-divider"></div>
-                            <a href="{% url 'logout' %}" class="dropdown-item text-danger"><i class="fas fa-sign-out-alt me-2"></i>Logout</a>
-                        </div>
+    {% if request.user.is_superuser or request.user.is_staff %}
+        <a href="/adminpanel/dashboard" class="dropdown-item">
+            <i class="fas fa-user me-2"></i>Dashboard
+        </a>
+    {% else %}
+        <a href="{% url 'dashboard' %}" class="dropdown-item">
+            <i class="fas fa-user me-2"></i>Dashboard
+        </a>
+    {% endif %}
+
+    <div class="dropdown-divider"></div>
+    <a href="{% url 'logout' %}" class="dropdown-item text-danger">
+        <i class="fas fa-sign-out-alt me-2"></i>Logout
+    </a>
+</div>
                     </div>
                     {% else %}
                   <div class="d-flex">

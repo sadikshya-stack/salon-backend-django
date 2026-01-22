@@ -52,7 +52,7 @@
                         <!-- Login Form -->
                         <div id="loginSection">
                             <h2 class="font-dancing-script text-primary text-center mb-4">Welcome Back</h3>
-                            <form id="loginForm" method="POST" action="{% url 'login' %}">
+                            <form method="POST" action="{% url 'login' %}">
                                 {% csrf_token %}
 
                                 {% if error %}

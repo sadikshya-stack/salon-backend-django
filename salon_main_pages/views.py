@@ -8,6 +8,7 @@ from datetime import datetime, time, timedelta
 from booking.utils import process_appointment_slot
 from django.http import Http404
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Home Page
@@ -254,7 +255,7 @@ def appointment_history(request):
 # Dashboard Page
 @login_required(login_url='login')
 def dashboard(request):
-    if request.user.role != 'customer' or request.user.is_superuser:
+    if request.user.role != 'customer' or request.user.is_superuser or request.user.is_staff:
         raise Http404("Page not found")
 
     today = timezone.now().date()
@@ -290,8 +291,15 @@ def dashboard(request):
 
 
 
-
+@csrf_exempt
 def login_view(request):
+     # 🔒 If already logged in, redirect
+    if request.user.is_authenticated:
+        if request.user.is_superuser or request.user.is_staff:
+            return redirect('/adminpanel/dashboard/')
+        else:
+            return redirect('/dashboard/')
+
     if request.method == 'POST':
         email = request.POST.get('username')
         password = request.POST.get('password')
@@ -303,20 +311,19 @@ def login_view(request):
                 messages.error(request, "Your account is inactive.")
                 return render(request, 'auth/login.html')
 
-            # Log the user in
             login(request, user)
 
-            # Redirect based on role
-            if user.is_superuser or user.role != 'customer':
+            # Redirect based on real Django flags
+            if user.is_superuser or user.is_staff:
                 return redirect('/adminpanel/dashboard/')
             else:
-                return redirect('/dashboard/')  # customer dashboard
+                return redirect('/dashboard/')
 
         else:
             messages.error(request, "Invalid email or password")
-            return render(request, 'auth/login.html')
 
     return render(request, 'auth/login.html')
+
 
 
 
@@ -327,6 +334,13 @@ def logout_view(request):
 
 
 def register_view(request):
+     # 🔒 If already logged in, redirect
+    if request.user.is_authenticated:
+        if request.user.is_superuser or request.user.is_staff:
+            return redirect('/adminpanel/dashboard/')
+        else:
+            return redirect('/dashboard/')
+
     if request.method == 'POST':
         full_name = request.POST.get('full_name', '').strip()
         email = request.POST.get('email')
