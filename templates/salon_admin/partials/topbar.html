@@ -18,8 +18,14 @@
 
          <div class="dropdown admin-profile">
                         <button class="admin-profile-btn d-flex align-items-center" data-bs-toggle="dropdown">
-                            <img src="https://ui-avatars.com/api/?name=Admin+User&background=d63384&color=fff" alt="Admin" class="admin-profile-img">
-                            <span class="admin-profile-name d-none d-md-inline">Admin User</span>
+                            <img
+                                src="https://ui-avatars.com/api/?name={{ request.user.first_name|default:request.user.email }}&background=d63384&color=fff"
+                                class="rounded-circle me-2"
+                                width="32"
+                                height="32"
+                                alt="User Avatar"
+                            >
+                            <span class="d-none d-lg-inline">{{ request.user.first_name|default:request.user.email }}</span>
                             <i class="fas fa-chevron-down d-none d-md-inline ms-1" style="font-size: 0.8rem;"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
