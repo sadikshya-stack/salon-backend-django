@@ -155,42 +155,6 @@
         animation: slideDown 0.3s ease;
     }
     
-    /* Payment Section */
-    .payment-method {
-        margin-bottom: 20px;
-    }
-    
-    .payment-method label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #333;
-        font-size: 16px;
-    }
-    
-    .payment-details {
-        background: #f8f9fa;
-        border: 2px solid #bf9456;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-        animation: slideDown 0.3s ease;
-        display: none;
-    }
-    
-    .payment-details h3 {
-        color: #333;
-        margin: 0 0 15px 0;
-        font-size: 18px;
-        border-bottom: 2px solid #bf9456;
-        padding-bottom: 8px;
-    }
-    
-    .payment-details #paymentInfo {
-        color: #555;
-        font-size: 15px;
-        line-height: 1.5;
-    }
     
     /* Error Styling */
     .error-message {
@@ -540,25 +504,6 @@
                 
                 <textarea name="notes" id="notes" rows="4" placeholder="Additional Notes (optional)" maxlength="200"></textarea>
                 
-                <div class="payment-method">
-                    <label for="payment">Payment Method:</label>
-                    <select name="payment" id="payment" required>
-                        <option value="">Select Payment Method</option>
-                        <option value="cash">Cash</option>
-                        <option value="card">Credit/Debit Card</option>
-                        <option value="digital">Digital Payment (Esewa/Khalti)</option>
-                        <option value="bank">Bank Transfer</option>
-                    </select>
-                </div>
-                
-                <div id="paymentDetails" class="payment-details">
-                    <h3>Payment Method Details</h3>
-                    <div id="paymentInfo"></div>
-                </div>
-                
-                <button type="submit" id="submitBtn">Book Now</button>
-            </form>
-        </div>
     </section>
 
     <script>
@@ -622,9 +567,6 @@
         const confirmBookingBtn = document.getElementById('confirmBooking');
         const cancelBookingBtn = document.getElementById('cancelBooking');
         const serviceSelect = document.getElementById('service');
-        const paymentSelect = document.getElementById('payment');
-        const paymentDetails = document.getElementById('paymentDetails');
-        const paymentInfo = document.getElementById('paymentInfo');
 
         // Service type boxes
         const serviceBoxes = {
@@ -657,8 +599,6 @@
             // Service selection
             serviceSelect.addEventListener('change', handleServiceChange);
             
-            // Payment method selection
-            paymentSelect.addEventListener('change', handlePaymentChange);
             
             // Confirmation modal buttons
             confirmBookingBtn.addEventListener('click', handleConfirmation);
@@ -696,27 +636,6 @@
             // Clear service type validation
             clearError('serviceType');
         }
-
-        // Handle payment method change
-        function handlePaymentChange() {
-            const selectedPayment = paymentSelect.value;
-            
-            if (selectedPayment) {
-                paymentDetails.style.display = 'block';
-                
-                const paymentDetailsContent = {
-                    'cash': '💵 <strong>Cash Payment</strong><br>You can pay in cash at our salon after the service is completed. Please bring exact change if possible.',
-                    'card': '💳 <strong>Credit/Debit Card</strong><br>We accept all major credit and debit cards (Visa, Mastercard). Card payment can be made at the salon.',
-                    'digital': '📱 <strong>Digital Payment (Esewa/Khalti)</strong><br>You can pay using Esewa or Khalti mobile wallets. QR code will be available at the salon.',
-                    'bank': '🏦 <strong>Bank Transfer</strong><br>Direct bank transfer to our business account. Account details will be provided during confirmation call.'
-                };
-                
-                paymentInfo.innerHTML = paymentDetailsContent[selectedPayment] || '';
-            } else {
-                paymentDetails.style.display = 'none';
-            }
-        }
-
         // Main validation and confirmation function
         function validateAndShowConfirmation() {
             clearAllErrors();
@@ -764,7 +683,6 @@
                 date: document.getElementById('date').value,
                 time: document.getElementById('time').value,
                 notes: document.getElementById('notes').value.trim(),
-                payment: paymentSelect.value
             };
         }
 
@@ -839,13 +757,6 @@
                 }
             }
             
-            // Payment validation
-            if (!data.payment) {
-                showError('payment', 'Please select a payment method');
-                isValid = false;
-            }
-            
-            return isValid;
         }
 
         // Show confirmation modal with details
@@ -901,10 +812,6 @@
                     <span class="confirmation-label">Time:</span>
                     <span class="confirmation-value">${formattedTime}</span>
                 </div>
-                <div class="confirmation-row">
-                    <span class="confirmation-label">Payment Method:</span>
-                    <span class="confirmation-value">${getPaymentDisplay(data.payment)}</span>
-                </div>`;
             
             if (data.notes) {
                 confirmationHTML += `
@@ -925,16 +832,6 @@
             document.body.style.overflow = 'hidden';
         }
 
-        // Get payment display name
-        function getPaymentDisplay(payment) {
-            const payments = {
-                'cash': 'Cash',
-                'card': 'Credit/Debit Card',
-                'digital': 'Digital Payment (Esewa/Khalti)',
-                'bank': 'Bank Transfer'
-            };
-            return payments[payment] || payment;
-        }
 
         // Handle confirmation
         function handleConfirmation() {
@@ -950,7 +847,6 @@
                 date: encodeURIComponent(formData.date),
                 time: encodeURIComponent(formData.time),
                 notes: encodeURIComponent(formData.notes || ''),
-                payment: encodeURIComponent(formData.payment)
             });
             
             // Close modal

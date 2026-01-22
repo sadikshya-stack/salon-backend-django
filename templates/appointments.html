@@ -229,14 +229,7 @@ button:hover {
             <input type="time" name="appointment_time" id="time" required min="09:00" max="18:00">
 
 
-            <select name="payment_method" required>
-                <option value="">Select Payment Method</option>
-                {% for method in payment_methods %}
-                    <option value="{{ method.id }}">
-                        {{ method.name }}
-                    </option>
-                {% endfor %}
-            </select>
+            
 
 
             <div style="background:#fff8e6; border:1px solid #D4AF37; padding:14px; border-radius:10px; margin:20px 0;">
@@ -246,7 +239,7 @@ button:hover {
                     <li>Same-day appointments must be booked at least 2 hours in advance.</li>
                     <li>Due to high demand, appointments are subject to staff availability.</li>
                     <li>If staff is unavailable, your appointment may be cancelled.</li>
-                    <li>Please arrive <strong>30 minutes early</strong> for your appointment.</li>
+                    <li>Please arrive <strong>10 minutes early</strong> for your appointment.</li>
                 </ul>
             </div>
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User, Service, ServiceType, Staff, Appointment, AvailableSlot, Contact, PaymentMethod, InventoryItem, InventoryCategory
+from .models import User, Service, ServiceType, Staff, Appointment, AvailableSlot, Contact,InventoryItem, InventoryCategory
 from django.utils.html import format_html
 
 
@@ -114,13 +114,11 @@ class AppointmentAdmin(admin.ModelAdmin):
         'appointment_date',
         'appointment_time',
         'status',
-        'payment_status',
         'created_at',
     )
 
     list_filter = (
         'status',
-        'payment_status',
         'appointment_date',
     )
 
@@ -140,9 +138,6 @@ class AppointmentAdmin(admin.ModelAdmin):
         }),
         ('Appointment', {
             'fields': ('appointment_date', 'appointment_time')
-        }),
-        ('Payment & Status', {
-            'fields': ('payment_method', 'payment_status', 'status')
         }),
         ('System', {
             'fields': ('created_at', 'updated_at')
@@ -177,7 +172,6 @@ class AvailableSlotAdmin(admin.ModelAdmin):
 
 admin.site.register(Contact)
 admin.site.register(ServiceType)
-admin.site.register(PaymentMethod)
 
 
 

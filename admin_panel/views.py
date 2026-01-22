@@ -37,7 +37,7 @@ def admin_dashboard(request):
 
         # Recent appointments (NO customer here)
         "recent_appointments": Appointment.objects.select_related(
-            "staff", "payment_method"
+            "staff",
         ).order_by("-created_at")[:5],
 
         # Popular services

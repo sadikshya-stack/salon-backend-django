@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from booking.models import Appointment, Contact, Service, User, PaymentMethod, ServiceType
+from booking.models import Appointment, Contact, Service, User,ServiceType
 from datetime import datetime, time, timedelta
 from booking.utils import process_appointment_slot
 from django.http import Http404
@@ -57,11 +57,9 @@ def appointments(request):
     # DATA FOR TEMPLATE (GET)
     # ----------------------------
     services = Service.objects.filter(is_active=True).prefetch_related('types')
-    payment_methods = PaymentMethod.objects.filter(is_active=True).all()
 
     context = {
         'services': services,
-        'payment_methods': payment_methods,
     }
 
     # ----------------------------
@@ -105,20 +103,6 @@ def appointments(request):
 
         if service_types.count() != len(selected_service_type_ids):
             messages.error(request, "Invalid service type selection.")
-            return redirect('appointments')
-
-        # ----------------------------
-        # PAYMENT METHOD VALIDATION
-        # ----------------------------
-        payment_method_id = request.POST.get('payment_method')
-
-        try:
-            payment_method = PaymentMethod.objects.get(
-                id=payment_method_id,
-                is_active=True
-            )
-        except PaymentMethod.DoesNotExist:
-            messages.error(request, "Please select a valid payment method.")
             return redirect('appointments')
 
         # ----------------------------
@@ -178,9 +162,6 @@ def appointments(request):
 
             appointment_date=appointment_date,
             appointment_time=selected_time,
-
-            payment_method=payment_method,
-            status='pending',
         )
 
         # link selected service type
@@ -281,7 +262,7 @@ def dashboard(request):
     appointments = (
         Appointment.objects
         .filter(email=request.user.email)
-        .select_related('staff', 'payment_method')
+        .select_related('staff')
         .prefetch_related('services', 'services__service')
     )
 

@@ -208,7 +208,6 @@
                             <th>Types</th>
                             <th>Status</th>
                             <th>Staff</th>
-                            <th>Payment Method</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -263,9 +262,7 @@
                                 {% endif %}
                             </td>
 
-                            <td>
-                                {{ appt.payment_method.name }}
-                            </td>
+                    
                         </tr>
                     {% endfor %}
                 {% else %}

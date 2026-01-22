@@ -54,10 +54,6 @@ class Service(models.Model):
     def __str__(self):
         return self.name
 
-
-
-
-
 class ServiceType(models.Model):
     service = models.ForeignKey(
         Service,
@@ -76,9 +72,6 @@ class ServiceType(models.Model):
 
     def __str__(self):
         return f"{self.service.name} - {self.name}"
-
-
-
 
 # ---------- Staff ----------
 class Staff(models.Model):
@@ -100,36 +93,6 @@ class Staff(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
-
-
-class PaymentMethod(models.Model):
-
-    class Meta:
-        db_table = 'payment_methods'
-
-    name = models.CharField(max_length=50, unique=True)
-    code = models.CharField(
-        max_length=30,
-        unique=True,
-        help_text="e.g. cash, esewa, khalti, stripe"
-    )
-
-    description = models.TextField(blank=True)
-    is_active = models.BooleanField(default=True)
-
-    service_fee = models.DecimalField(
-        max_digits=6,
-        decimal_places=2,
-        default=0,
-        help_text="Extra charge for this payment method"
-    )
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
-
 
 class Appointment(models.Model):
 
@@ -157,12 +120,7 @@ class Appointment(models.Model):
         help_text="Staff assigned to this appointment"
     )
 
-    payment_method = models.ForeignKey(
-        PaymentMethod,
-        on_delete=models.PROTECT,
-        related_name='appointments'
-    )
-
+   
 
     # ---------------------------
     # APPOINTMENT STATUS
@@ -187,11 +145,6 @@ class Appointment(models.Model):
     # ---------------------------
     appointment_date = models.DateField()
     appointment_time = models.TimeField()
-
-    # ---------------------------
-    # PAYMENT
-    # ---------------------------
-    payment_status = models.BooleanField(default=False)  # Paid or Not
 
     # ---------------------------
     # APPOINTMENT STATUS

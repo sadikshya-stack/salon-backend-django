@@ -59,21 +59,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='PaymentMethod',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50, unique=True)),
-                ('code', models.CharField(help_text='e.g. cash, esewa, khalti, stripe', max_length=30, unique=True)),
-                ('description', models.TextField(blank=True)),
-                ('is_active', models.BooleanField(default=True)),
-                ('service_fee', models.DecimalField(decimal_places=2, default=0, help_text='Extra charge for this payment method', max_digits=6)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-            ],
-            options={
-                'db_table': 'payment_methods',
-            },
-        ),
-        migrations.CreateModel(
             name='Service',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -131,14 +116,12 @@ class Migration(migrations.Migration):
                 ('phone', models.CharField(default='0000000000', max_length=10)),
                 ('appointment_date', models.DateField()),
                 ('appointment_time', models.TimeField()),
-                ('payment_status', models.BooleanField(default=False)),
                 ('status', models.CharField(choices=[('pending', 'Pending'), ('confirmed', 'Confirmed'), ('completed', 'Completed'), ('cancelled', 'Cancelled')], default='pending', max_length=20)),
                 ('notes', models.TextField(blank=True, default='')),
                 ('cancelled_reason', models.TextField(blank=True, null=True)),
                 ('cancelled_at', models.DateTimeField(blank=True, null=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('payment_method', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='appointments', to='booking.paymentmethod')),
                 ('services', models.ManyToManyField(help_text='Selected services for this appointment', related_name='appointments', to='booking.servicetype')),
                 ('staff', models.ForeignKey(blank=True, help_text='Staff assigned to this appointment', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='appointments', to='booking.staff')),
             ],

@@ -24,7 +24,7 @@ def appointments_create(request):
             appointment_time=request.POST.get('time'),
 
             notes=request.POST.get('notes'),
-            payment_method=request.POST.get('payment'),
+            
         )
         return redirect('appointments')
 
